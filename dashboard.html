@@ -1,84 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>VS Code Editor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { background: #1e1e1e; color: white; font-family: monospace; margin: 0; padding: 0; }
-        .header { background: #333; padding: 15px; font-size: 18px; }
-        .btn { background: #0e639c; color: white; padding: 10px 15px; border: none; margin: 10px; cursor: pointer; }
-        #editor { width: 94%; height: 50vh; background: #1e1e1e; color: #d4d4d4; border: 1px solid #444; margin: 10px; padding: 10px; font-size: 14px; }
-        #output { width: 94%; height: 20vh; background: #000; color: #00ff00; border: 1px solid #444; margin: 10px; padding: 10px; font-size: 14px; overflow: auto; }
-    </style>
+  <title>VS Code Editor</title>
+  <style>
+    body{background:#1e1e1e;color:white;font-family:monospace;margin:0;padding:10px}
+    .header{background:#007acc;padding:10px;margin-bottom:10px}
+    textarea{width:100%;height:70vh;background:#1e1e1e;color:white;border:1px solid #555;padding:10px}
+    #output{background:#252526;padding:10px;margin-top:10px;min-height:50px}
+  </style>
 </head>
 <body>
-    <div class="header">VS Code Editor</div>
-    <button onclick="logout()" style="background:#ff4757; color:white; border:none; padding:6px 12px; border-radius:5px; margin:10px;">Change User</button>
-    <button class="btn" onclick="runCode()">RUN CODE</button>
-    <textarea id="editor" placeholder="Write JavaScript code here...
-Example: console.log('Hello Vyshnavi')"></textarea>
-    <div style="margin-left:10px;">Output:</div>
-    <div id="output"></div>
+  <div class="header">VS Code Editor</div>
+  <button onclick="logout()" style="background:#ff4757;color:white;border:none;padding:6px 12px;margin:10px 0;">Change User</button>
+  <textarea id="editor" placeholder="Write code here"></textarea>
+  <br><button onclick="runCode()" style="background:#0e639c;color:white;padding:10px;border:none;margin-top:10px;">Run</button>
+  <div id="output"></div>
 
-    <script>
-    // Multi-user + Refresh ayina data povadu
-let currentUsername = "";
-
-window.onload = function() {
-    // 1. User peru teesuko
-    currentUsername = localStorage.getItem('currentUser');
-    if(!currentUsername) {
-        currentUsername = prompt("Welcome! Nee peru enter cheyyi:");
-        if(!currentUsername || currentUsername.trim() === "") {
-            currentUsername = "Guest" + Math.floor(Math.random() * 100);
+  <script>
+    let currentUsername = "";
+    window.onload = function() {
+        currentUsername = localStorage.getItem('currentUser');
+        if(!currentUsername) {
+            currentUsername = prompt("Welcome! Nee peru enter cheyyi:");
+            if(!currentUsername || currentUsername.trim() === "") {
+                currentUsername = "Guest" + Math.floor(Math.random() * 100);
+            }
+            localStorage.setItem('currentUser', currentUsername);
         }
-        localStorage.setItem('currentUser', currentUsername);
+        document.querySelector('.header').innerHTML = `Hi ${currentUsername} 💚 | VS Code`;
+        document.getElementById('editor').value = "";
+        let savedCode = localStorage.getItem('usercode_' + currentUsername);
+        if(savedCode) {
+            document.getElementById('editor').value = savedCode;
+        }
+        document.getElementById('editor').addEventListener('input', function() {
+            localStorage.setItem('usercode_' + currentUsername, this.value);
+        });
+    };
+    function logout() {
+        if(confirm("User change cheyyala?")) {
+            localStorage.removeItem('currentUser');
+            location.reload();
+        }
     }
-    
-    // 2. Header change cheyyi
-    document.querySelector('.header').innerHTML = `Hi ${currentUsername} 💚 | VS Code`;
-    
-    // 3. MUNDU EDITOR KHALI CHEYYI - IDI IMPORTANT
-    document.getElementById('editor').value = "";
-    
-    // 4. TARVATA SAVED CODE LOAD CHEYYI
-    let savedCode = localStorage.getItem('usercode_' + currentUsername);
-    if(savedCode) {
-        document.getElementById('editor').value = savedCode;
-    } else {
-        document.getElementById('editor').value = "// Hi " + currentUsername + "\n// Code raayu ikkada";
-        // First time ayithe ade save cheyyi
-        localStorage.setItem('usercode_' + currentUsername, document.getElementById('editor').value);
+    function runCode() {
+        let code = document.getElementById('editor').value;
+        let output = document.getElementById('output');
+        output.innerHTML = ''; 
+        try {
+            let oldLog = console.log;
+            console.log = function(msg) { output.innerHTML += msg + '<br>'; }
+            eval(code);
+            console.log = oldLog;
+        } catch (e) {
+            output.innerHTML = 'Error: ' + e.message;
+        }
     }
-    
-    // 5. AUTO SAVE - Prathi letter type cheste save avutadi
-    document.getElementById('editor').addEventListener('input', function() {
-        localStorage.setItem('usercode_' + currentUsername, this.value);
-    });
-};
-
-// User change cheyadaniki
-function logout() {
-    if(confirm("User change cheyyala? Nee code save ayyindi.")) {
-        localStorage.removeItem('currentUser');
-        location.reload();
-    }
-}
-
-// Run code function - alane unchukondi
-function runCode() {
-    let code = document.getElementById('editor').value;
-    let output = document.getElementById('output');
-    output.innerHTML = ''; 
-    try {
-        let oldLog = console.log;
-        console.log = function(msg) { output.innerHTML += msg + '<br>'; }
-        eval(code);
-        console.log = oldLog;
-    } catch (e) {
-        output.innerHTML = 'Error: ' + e.message;
-    }
-           }
-    </script>
+  </script>
 </body>
 </html>
