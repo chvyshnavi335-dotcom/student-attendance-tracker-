@@ -21,55 +21,64 @@ Example: console.log('Hello Vyshnavi')"></textarea>
     <div id="output"></div>
 
     <script>
-        // Multi-user - evaru open chesina vaallake separate
+    // Multi-user + Refresh ayina data povadu
+let currentUsername = "";
+
 window.onload = function() {
-    let username = localStorage.getItem('currentUser');
-    if(!username) {
-        username = prompt("Welcome! Nee peru enter cheyyi:");
-        if(!username || username.trim() === "") {
-            username = "Guest" + Math.floor(Math.random() * 100);
+    // 1. User peru teesuko
+    currentUsername = localStorage.getItem('currentUser');
+    if(!currentUsername) {
+        currentUsername = prompt("Welcome! Nee peru enter cheyyi:");
+        if(!currentUsername || currentUsername.trim() === "") {
+            currentUsername = "Guest" + Math.floor(Math.random() * 100);
         }
-        localStorage.setItem('currentUser', username);
+        localStorage.setItem('currentUser', currentUsername);
     }
     
-    document.querySelector('h1').innerText = `Hi ${username} 💚 | Your Editor`;
+    // 2. Header change cheyyi
+    document.querySelector('.header').innerHTML = `Hi ${currentUsername} 💚 | VS Code`;
     
-    let userCode = localStorage.getItem('user_' + username);
-    if(userCode) {
-        document.getElementById('editor').value = userCode;
+    // 3. MUNDU EDITOR KHALI CHEYYI - IDI IMPORTANT
+    document.getElementById('editor').value = "";
+    
+    // 4. TARVATA SAVED CODE LOAD CHEYYI
+    let savedCode = localStorage.getItem('usercode_' + currentUsername);
+    if(savedCode) {
+        document.getElementById('editor').value = savedCode;
     } else {
-        document.getElementById('editor').value = "// Hi " + username + "\n// Code raayu ikkada";
+        document.getElementById('editor').value = "// Hi " + currentUsername + "\n// Code raayu ikkada";
+        // First time ayithe ade save cheyyi
+        localStorage.setItem('usercode_' + currentUsername, document.getElementById('editor').value);
     }
     
+    // 5. AUTO SAVE - Prathi letter type cheste save avutadi
     document.getElementById('editor').addEventListener('input', function() {
-        localStorage.setItem('user_' + username, this.value);
+        localStorage.setItem('usercode_' + currentUsername, this.value);
     });
 };
 
+// User change cheyadaniki
 function logout() {
-    if(confirm("User change cheyyala?")) {
+    if(confirm("User change cheyyala? Nee code save ayyindi.")) {
         localStorage.removeItem('currentUser');
         location.reload();
     }
-        }
-        function runCode() {
-            let code = document.getElementById('editor').value;
-            let output = document.getElementById('output');
-            output.innerHTML = ''; // clear old output
-            
-            // Hijack console.log to show in output div
-            let oldLog = console.log;
-            console.log = function(msg) {
-                output.innerHTML += msg + '<br>';
-                oldLog.apply(console, arguments);
-            }
-            
-            try {
-                eval(code); // Run the code
-            } catch (e) {
-                output.innerHTML += 'Error: ' + e.message;
-            }
-        }
+}
+
+// Run code function - alane unchukondi
+function runCode() {
+    let code = document.getElementById('editor').value;
+    let output = document.getElementById('output');
+    output.innerHTML = ''; 
+    try {
+        let oldLog = console.log;
+        console.log = function(msg) { output.innerHTML += msg + '<br>'; }
+        eval(code);
+        console.log = oldLog;
+    } catch (e) {
+        output.innerHTML = 'Error: ' + e.message;
+    }
+           }
     </script>
 </body>
 </html>
