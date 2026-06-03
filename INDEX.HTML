@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
+    .login-container {
+      background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+      border-radius: 20px; padding: 40px; width: 100%; max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .login-container h2 { color: white; text-align: center; margin-bottom: 30px; font-size: 28px; }
+    .input-group { margin-bottom: 20px; }
+    .input-group input {
+      width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 10px; color: white; font-size: 16px; outline: none;
+    }
+    .input-group input::placeholder { color: rgba(255, 255, 255, 0.7); }
+    .login-btn {
+      width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none; border-radius: 10px; color: white; font-size: 18px; font-weight: bold; cursor: pointer;
+    }
+    .error-msg { color: #ff6b6b; text-align: center; margin-top: 15px; display: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginPage">
+    <h2><i class="fas fa-graduation-cap"></i> Student Login</h2>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Email: vyshnavi@gmail.com">
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password: 123456">
+    </div>
+    <button class="login-btn" onclick="login()">Login</button>
+    <div class="error-msg" id="errorMsg">Invalid email or password!</div>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+      
+      if(email === 'vyshnavi@gmail.com' && password === '123456') {
+        errorMsg.style.display = 'none';
+        // Login ayyaka dashboard.html ki pampistadi
+        window.location.href = 'dashboard.html';
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
