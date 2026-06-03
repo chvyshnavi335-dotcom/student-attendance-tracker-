@@ -1,61 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>VS Code Editor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS Code Editor | Vyshnavi 💚</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body{background:#1e1e1e;color:white;font-family:monospace;margin:0;padding:10px}
-    .header{background:#007acc;padding:10px;margin-bottom:10px}
-    textarea{width:100%;height:70vh;background:#1e1e1e;color:white;border:1px solid #555;padding:10px}
-    #output{background:#252526;padding:10px;margin-top:10px;min-height:50px}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: 'Consolas', 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .titlebar {
+      background: #323233;
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2d2d2d;
+    }
+    .titlebar h1 {
+      font-size: 14px;
+      color: #cccccc;
+      font-weight: normal;
+    }
+    .titlebar h1 i { color: #007acc; margin-right: 8px; }
+    .welcome { color: #4ec9b0; font-size: 13px; }
+    .save-status { 
+      color: #6a9955; 
+      font-size: 12px; 
+      margin-left: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .save-status.show { opacity: 1; }
+    .editor-container {
+      flex: 1;
+      display: flex;
+    }
+    .line-numbers {
+      background: #1e1e1e;
+      padding: 10px 0;
+      width: 50px;
+      text-align: right;
+      color: #858585;
+      font-size: 14px;
+      line-height: 21px;
+      user-select: none;
+      border-right: 1px solid #2d2d2d;
+    }
+    .line-numbers div { padding-right: 10px; }
+    .code-area {
+      flex: 1;
+      padding: 10px 15px;
+      background: #1e1e1e;
+      border: none;
+      outline: none;
+      color: #d4d4d4;
+      font-size: 14px;
+      line-height: 21px;
+      resize: none;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .run-panel {
+      background: #252526;
+      padding: 10px 15px;
+      border-top: 1px solid #2d2d2d;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .run-btn {
+      background: #0e639c;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .run-btn:hover { background: #1177bb; }
+    .run-btn i { margin-right: 5px; }
+    .clear-btn {
+      background: #5a1d1d;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .clear-btn:hover { background: #7a2d2d; }
+    .output {
+      background: #1e1e1e;
+      border: 1px solid #2d2d2d;
+      padding: 10px;
+      min-height: 100px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 13px;
+      flex: 1;
+      color: #4ec9b0;
+    }
+    .output-error { color: #f48771; }
   </style>
 </head>
 <body>
-  <div class="header">VS Code Editor</div>
-  <button onclick="logout()" style="background:#ff4757;color:white;border:none;padding:6px 12px;margin:10px 0;">Change User</button>
-  <textarea id="editor" placeholder="Write code here"></textarea>
-  <br><button onclick="runCode()" style="background:#0e639c;color:white;padding:10px;border:none;margin-top:10px;">Run</button>
-  <div id="output"></div>
+  <div class="titlebar">
+    <h1><i class="fab fa-vscode"></i>Hi Vyshnavi 💚 | VS Code</h1>
+    <div style="display: flex; align-items: center;">
+      <div class="welcome">Auto-Save Enabled</div>
+      <span class="save-status" id="saveStatus">Saved ✓</span>
+    </div>
+  </div>
+
+  <div class="editor-container">
+    <div class="line-numbers" id="lineNumbers">
+      <div>1</div>
+    </div>
+    <textarea class="code-area" id="codeArea" placeholder="// Type JavaScript code here...&#10;console.log('Hello Vyshnavi 💚');" spellcheck="false"></textarea>
+  </div>
+
+  <div class="run-panel">
+    <button class="run-btn" onclick="runCode()">
+      <i class="fas fa-play"></i> Run Code
+    </button>
+    <button class="clear-btn" onclick="clearCode()">
+      <i class="fas fa-trash"></i> Clear
+    </button>
+    <div class="output" id="output">Output will appear here...</div>
+  </div>
 
   <script>
-    let currentUsername = "";
-    window.onload = function() {
-        currentUsername = localStorage.getItem('currentUser');
-        if(!currentUsername) {
-            currentUsername = prompt("Welcome! Nee peru enter cheyyi:");
-            if(!currentUsername || currentUsername.trim() === "") {
-                currentUsername = "Guest" + Math.floor(Math.random() * 100);
-            }
-            localStorage.setItem('currentUser', currentUsername);
-        }
-        document.querySelector('.header').innerHTML = `Hi ${currentUsername} 💚 | VS Code`;
-        document.getElementById('editor').value = "";
-        let savedCode = localStorage.getItem('usercode_' + currentUsername);
-        if(savedCode) {
-            document.getElementById('editor').value = savedCode;
-        }
-        document.getElementById('editor').addEventListener('input', function() {
-            localStorage.setItem('usercode_' + currentUsername, this.value);
-        });
-    };
-    function logout() {
-        if(confirm("User change cheyyala?")) {
-            localStorage.removeItem('currentUser');
-            location.reload();
-        }
+    const codeArea = document.getElementById('codeArea');
+    const lineNumbers = document.getElementById('lineNumbers');
+    const output = document.getElementById('output');
+    const saveStatus = document.getElementById('saveStatus');
+
+    // Load saved code from browser
+    window.addEventListener('load', () => {
+      const savedCode = localStorage.getItem('vyshnaviCode');
+      if(savedCode) {
+        codeArea.value = savedCode;
+      } else {
+        codeArea.value = "// Welcome Vyshnavi 💚\nconsole.log('Hello World!');";
+      }
+      updateLineNumbers();
+    });
+
+    // Auto-save code every time you type
+    let saveTimeout;
+    codeArea.addEventListener('input', () => {
+      updateLineNumbers();
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        localStorage.setItem('vyshnaviCode', codeArea.value);
+        saveStatus.classList.add('show');
+        setTimeout(() => saveStatus.classList.remove('show'), 1000);
+      }, 500);
+    });
+
+    codeArea.addEventListener('scroll', () => {
+      lineNumbers.scrollTop = codeArea.scrollTop;
+    });
+
+    function updateLineNumbers() {
+      const lines = codeArea.value.split('\n').length;
+      lineNumbers.innerHTML = '';
+      for(let i = 1; i <= lines; i++) {
+        const div = document.createElement('div');
+        div.textContent = i;
+        lineNumbers.appendChild(div);
+      }
     }
+
     function runCode() {
-        let code = document.getElementById('editor').value;
-        let output = document.getElementById('output');
-        output.innerHTML = ''; 
-        try {
-            let oldLog = console.log;
-            console.log = function(msg) { output.innerHTML += msg + '<br>'; }
-            eval(code);
-            console.log = oldLog;
-        } catch (e) {
-            output.innerHTML = 'Error: ' + e.message;
+      const code = codeArea.value;
+      output.innerHTML = '';
+      output.classList.remove('output-error');
+      
+      const oldLog = console.log;
+      console.log = function(...args) {
+        output.innerHTML += args.join(' ') + '\n';
+        oldLog.apply(console, args);
+      };
+
+      try {
+        const result = eval(code);
+        if(result !== undefined) {
+          output.innerHTML += '> ' + result + '\n';
         }
+        if(output.innerHTML === '') {
+          output.innerHTML = 'Code executed successfully with no output';
+        }
+      } catch(err) {
+        output.classList.add('output-error');
+        output.innerHTML = 'Error: ' + err.message;
+      }
+      
+      console.log = oldLog;
     }
+
+    function clearCode() {
+      if(confirm('Code antha delete cheyyala Vyshnavi?')) {
+        codeArea.value = '';
+        localStorage.removeItem('vyshnaviCode');
+        updateLineNumbers();
+        output.innerHTML = 'Cleared';
+      }
+    }
+
+    // Tab support
+    codeArea.addEventListener('keydown', function(e) {
+      if(e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 2;
+        updateLineNumbers();
+      }
+    });
+
+    updateLineNumbers();
   </script>
 </body>
-</html>
+      </html>
