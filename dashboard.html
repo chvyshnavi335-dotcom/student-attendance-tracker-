@@ -3,231 +3,176 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VS Code Editor | Vyshnavi 💚</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <title>Vyshnavi Code Playground</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      font-family: 'Consolas', 'Courier New', monospace;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #0f0c29; font-family: 'Segoe UI', sans-serif;
+      color: #fff; height: 100vh; overflow: hidden;
     }
-    .titlebar {
-      background: #323233;
-      padding: 8px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #2d2d2d;
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #1e1e1e; padding: 10px 20px; border-bottom: 2px solid #4ecdc4;
     }
-    .titlebar h1 {
-      font-size: 14px;
-      color: #cccccc;
-      font-weight: normal;
+    .header h1 { font-size: 20px; }
+    .header h1 span { color: #4ecdc4; }
+    .status { color: #4ecdc4; font-size: 13px; margin-right: 15px; }
+    .logout {
+      padding: 8px 15px; background: #ff6b6b; border: none;
+      border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px;
     }
-    .titlebar h1 i { color: #007acc; margin-right: 8px; }
-    .welcome { color: #4ec9b0; font-size: 13px; }
-    .save-status { 
-      color: #6a9955; 
-      font-size: 12px; 
-      margin-left: 10px;
-      opacity: 0;
-      transition: opacity 0.3s;
+    .container { display: flex; height: calc(100vh - 52px); }
+    .editors {
+      width: 50%; display: flex; flex-direction: column;
+      background: #1e1e1e; border-right: 2px solid #4ecdc4;
     }
-    .save-status.show { opacity: 1; }
-    .editor-container {
-      flex: 1;
-      display: flex;
+    .tabs { display: flex; background: #2d2d2d; }
+    .tab-btn {
+      flex: 1; padding: 12px; background: #2d2d2d; border: none;
+      color: #888; cursor: pointer; font-size: 14px; transition: 0.2s;
     }
-    .line-numbers {
-      background: #1e1e1e;
-      padding: 10px 0;
-      width: 50px;
-      text-align: right;
-      color: #858585;
-      font-size: 14px;
-      line-height: 21px;
-      user-select: none;
-      border-right: 1px solid #2d2d2d;
+    .tab-btn.active { background: #1e1e1e; color: #4ecdc4; border-bottom: 2px solid #4ecdc4; }
+    .editor-area { flex: 1; display: none; }
+    .editor-area.active { display: block; }
+    textarea {
+      width: 100%; height: 100%; background: #1e1e1e; color: #d4d4d4;
+      border: none; padding: 15px; font-family: 'Consolas', monospace;
+      font-size: 14px; resize: none; outline: none;
     }
-    .line-numbers div { padding-right: 10px; }
-    .code-area {
-      flex: 1;
-      padding: 10px 15px;
-      background: #1e1e1e;
-      border: none;
-      outline: none;
-      color: #d4d4d4;
-      font-size: 14px;
-      line-height: 21px;
-      resize: none;
-      font-family: 'Consolas', 'Courier New', monospace;
+    .preview {
+      width: 50%; background: #fff; position: relative;
     }
-    .run-panel {
-      background: #252526;
-      padding: 10px 15px;
-      border-top: 1px solid #2d2d2d;
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    .preview-header {
+      background: #2d2d2d; padding: 10px 15px; color: #fff;
+      font-size: 14px; display: flex; justify-content: space-between; align-items: center;
     }
     .run-btn {
-      background: #0e639c;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
+      padding: 6px 15px; background: #4ecdc4; border: none;
+      border-radius: 5px; color: #000; font-weight: bold; cursor: pointer;
     }
-    .run-btn:hover { background: #1177bb; }
-    .run-btn i { margin-right: 5px; }
-    .clear-btn {
-      background: #5a1d1d;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 13px;
+    iframe {
+      width: 100%; height: calc(100% - 41px); border: none; background: #fff;
     }
-    .clear-btn:hover { background: #7a2d2d; }
-    .output {
-      background: #1e1e1e;
-      border: 1px solid #2d2d2d;
-      padding: 10px;
-      min-height: 100px;
-      max-height: 150px;
-      overflow-y: auto;
-      font-size: 13px;
-      flex: 1;
-      color: #4ec9b0;
+    @media(max-width: 768px) {
+      .container { flex-direction: column; }
+      .editors, .preview { width: 100%; height: 50%; }
+      .editors { border-right: none; border-bottom: 2px solid #4ecdc4; }
     }
-    .output-error { color: #f48771; }
   </style>
 </head>
 <body>
-  <div class="titlebar">
-    <h1><i class="fab fa-vscode"></i>Hi Vyshnavi 💚 | VS Code</h1>
-    <div style="display: flex; align-items: center;">
-      <div class="welcome">Auto-Save Enabled</div>
-      <span class="save-status" id="saveStatus">Saved ✓</span>
+  <div class="header">
+    <h1>Vyshnavi 💚 | <span>Web Playground</span></h1>
+    <div>
+      <span class="status" id="saveStatus">Ready</span>
+      <button class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
   </div>
 
-  <div class="editor-container">
-    <div class="line-numbers" id="lineNumbers">
-      <div>1</div>
+  <div class="container">
+    <div class="editors">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="openEditor('html')"><i class="fab fa-html5"></i> HTML</button>
+        <button class="tab-btn" onclick="openEditor('css')"><i class="fab fa-css3-alt"></i> CSS</button>
+        <button class="tab-btn" onclick="openEditor('js')"><i class="fab fa-js"></i> JS</button>
+      </div>
+      
+      <div id="html-editor" class="editor-area active">
+        <textarea id="htmlCode" placeholder="<!-- HTML raasuko -->&#10;<h1>Hello Vyshnavi</h1>&#10;<button onclick='sayHi()'>Click Me</button>"></textarea>
+      </div>
+      
+      <div id="css-editor" class="editor-area">
+        <textarea id="cssCode" placeholder="/* CSS raasuko */&#10;body {&#10;  background: linear-gradient(135deg, #667eea, #764ba2);&#10;  font-family: Arial;&#10;  text-align: center;&#10;  padding: 50px;&#10;}&#10;h1 { color: white; }&#10;button {&#10;  padding: 15px 30px;&#10;  font-size: 18px;&#10;  border: none;&#10;  border-radius: 10px;&#10;  cursor: pointer;&#10;}"></textarea>
+      </div>
+      
+      <div id="js-editor" class="editor-area">
+        <textarea id="jsCode" placeholder="// JavaScript raasuko&#10;function sayHi() {&#10;  alert('Hello Vyshnavi 💚'); &#10;}"></textarea>
+      </div>
     </div>
-    <textarea class="code-area" id="codeArea" placeholder="// Type JavaScript code here...&#10;console.log('Hello Vyshnavi 💚');" spellcheck="false"></textarea>
-  </div>
 
-  <div class="run-panel">
-    <button class="run-btn" onclick="runCode()">
-      <i class="fas fa-play"></i> Run Code
-    </button>
-    <button class="clear-btn" onclick="clearCode()">
-      <i class="fas fa-trash"></i> Clear
-    </button>
-    <div class="output" id="output">Output will appear here...</div>
+    <div class="preview">
+      <div class="preview-header">
+        <span><i class="fa-solid fa-display"></i> Live Output</span>
+        <button class="run-btn" onclick="runCode()"><i class="fa-solid fa-play"></i> Run</button>
+      </div>
+      <iframe id="previewFrame"></iframe>
+    </div>
   </div>
 
   <script>
-    const codeArea = document.getElementById('codeArea');
-    const lineNumbers = document.getElementById('lineNumbers');
-    const output = document.getElementById('output');
+    // LOGIN CHECK
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    // TAB SWITCHING
+    function openEditor(lang) {
+      document.querySelectorAll('.editor-area').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(lang + '-editor').classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // AUTO-SAVE LOGIC
+    const htmlCode = document.getElementById('htmlCode');
+    const cssCode = document.getElementById('cssCode');
+    const jsCode = document.getElementById('jsCode');
     const saveStatus = document.getElementById('saveStatus');
 
-    // Load saved code from browser
-    window.addEventListener('load', () => {
-      const savedCode = localStorage.getItem('vyshnaviCode');
-      if(savedCode) {
-        codeArea.value = savedCode;
-      } else {
-        codeArea.value = "// Welcome Vyshnavi 💚\nconsole.log('Hello World!');";
-      }
-      updateLineNumbers();
+    // Load saved code
+    htmlCode.value = localStorage.getItem('vyshnaviHTML') || '<h1>Hello Vyshnavi 💚</h1>\n<button onclick="sayHi()">Click Me</button>';
+    cssCode.value = localStorage.getItem('vyshnaviCSS') || 'body {\n  background: linear-gradient(135deg, #667eea, #764ba2);\n  font-family: Arial;\n  text-align: center;\n  padding: 50px;\n}\nh1 { color: white; }\nbutton {\n  padding: 15px 30px;\n  font-size: 18px;\n  border: none;\n  border-radius: 10px;\n  cursor: pointer;\n}';
+    jsCode.value = localStorage.getItem('vyshnaviJS') || 'function sayHi() {\n  alert("Hello Vyshnavi 💚");\n}';
+
+    let timeout;
+    [htmlCode, cssCode, jsCode].forEach(editor => {
+      editor.addEventListener('input', () => {
+        saveStatus.textContent = 'Saving...';
+        saveStatus.style.color = '#ffaa00';
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          localStorage.setItem('vyshnaviHTML', htmlCode.value);
+          localStorage.setItem('vyshnaviCSS', cssCode.value);
+          localStorage.setItem('vyshnaviJS', jsCode.value);
+          saveStatus.textContent = 'Saved ✓';
+          saveStatus.style.color = '#4ecdc4';
+          runCode();
+        }, 800);
+      });
     });
 
-    // Auto-save code every time you type
-    let saveTimeout;
-    codeArea.addEventListener('input', () => {
-      updateLineNumbers();
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => {
-        localStorage.setItem('vyshnaviCode', codeArea.value);
-        saveStatus.classList.add('show');
-        setTimeout(() => saveStatus.classList.remove('show'), 1000);
-      }, 500);
-    });
-
-    codeArea.addEventListener('scroll', () => {
-      lineNumbers.scrollTop = codeArea.scrollTop;
-    });
-
-    function updateLineNumbers() {
-      const lines = codeArea.value.split('\n').length;
-      lineNumbers.innerHTML = '';
-      for(let i = 1; i <= lines; i++) {
-        const div = document.createElement('div');
-        div.textContent = i;
-        lineNumbers.appendChild(div);
-      }
-    }
-
+    // RUN CODE FUNCTION
     function runCode() {
-      const code = codeArea.value;
-      output.innerHTML = '';
-      output.classList.remove('output-error');
+      const previewFrame = document.getElementById('previewFrame');
+      const preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
       
-      const oldLog = console.log;
-      console.log = function(...args) {
-        output.innerHTML += args.join(' ') + '\n';
-        oldLog.apply(console, args);
-      };
-
-      try {
-        const result = eval(code);
-        if(result !== undefined) {
-          output.innerHTML += '> ' + result + '\n';
-        }
-        if(output.innerHTML === '') {
-          output.innerHTML = 'Code executed successfully with no output';
-        }
-      } catch(err) {
-        output.classList.add('output-error');
-        output.innerHTML = 'Error: ' + err.message;
-      }
+      const combinedCode = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>${cssCode.value}</style>
+        </head>
+        <body>
+          ${htmlCode.value}
+          <script>${jsCode.value}<\/script>
+        </body>
+        </html>
+      `;
       
-      console.log = oldLog;
+      preview.open();
+      preview.write(combinedCode);
+      preview.close();
     }
 
-    function clearCode() {
-      if(confirm('Code antha delete cheyyala Vyshnavi?')) {
-        codeArea.value = '';
-        localStorage.removeItem('vyshnaviCode');
-        updateLineNumbers();
-        output.innerHTML = 'Cleared';
-      }
+    // Initial run
+    runCode();
+
+    // LOGOUT
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'index.html';
     }
-
-    // Tab support
-    codeArea.addEventListener('keydown', function(e) {
-      if(e.key === 'Tab') {
-        e.preventDefault();
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-        this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
-        this.selectionStart = this.selectionEnd = start + 2;
-        updateLineNumbers();
-      }
-    });
-
-    updateLineNumbers();
   </script>
 </body>
-      </html>
+        </html>
