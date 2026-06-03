@@ -22,15 +22,17 @@ Example: console.log('Hello Vyshnavi')"></textarea>
     <script>
         // Auto save code when you type
 window.onload = function() {
+    // 1. Page load ayyaka old code load cheyyi
     let savedCode = localStorage.getItem('myCode');
     if(savedCode) {
         document.getElementById('editor').value = savedCode;
     }
-}
-
-document.getElementById('editor').addEventListener('input', function() {
-    localStorage.setItem('myCode', this.value);
-});
+    
+    // 2. Type chesinappudu save cheyyi - idi window.onload lopala pettadam important
+    document.getElementById('editor').addEventListener('input', function() {
+        localStorage.setItem('myCode', this.value);
+    });
+};
         function runCode() {
             let code = document.getElementById('editor').value;
             let output = document.getElementById('output');
