@@ -18,64 +18,56 @@
 <body>
   <div class="box">
     <h2 id="title">Student Login</h2>
-    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="email" placeholder="roll number">
     <input type="password" id="password" placeholder="Password" required>
     <button id="actionBtn">Login</button>
     <div class="toggle" id="toggleText">New user? Sign Up</div>
     <div class="error" id="error"></div>
   </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyDFoDQ06mbw2Qajx92C6TjbeHOOe_BByRU",
-      authDomain: "student-login-page-b90a8.firebaseapp.com",
-      projectId: "student-login-page-b90a8",
-      storageBucket: "student-login-page-b90a8.firebasestorage.app",
-      messagingSenderId: "72064863710",
-      appId: "1:72064863710:web:8cc415a42cca1acdc8214f"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    
-    let isLogin = true;
-    const title = document.getElementById('title');
-    const actionBtn = document.getElementById('actionBtn');
-    const toggleText = document.getElementById('toggleText');
+  <script>
+document.getElementById('actionBtn').onclick = async function() {
+    // 1. Input values teesko - nee code lo 'email' undi, 'roll' ga marchu
+    const roll = document.getElementById('email').value;  // email box ne roll kosam vaduko
+    const password = document.getElementById('password').value;
     const errorDiv = document.getElementById('error');
     
-    toggleText.onclick = () => {
-      isLogin = !isLogin;
-      title.textContent = isLogin ? 'Student Login' : 'Student Sign Up';
-      actionBtn.textContent = isLogin ? 'Login' : 'Sign Up';
-      toggleText.textContent = isLogin ? 'New user? Sign Up' : 'Already have account? Login';
-      errorDiv.textContent = '';
-    };
+    errorDiv.innerText = '';
     
-    actionBtn.onclick = async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      errorDiv.textContent = '';
-      
-      if (!email || !password) {
-        errorDiv.textContent = 'Please enter email and password';
+    if(!roll || !password){
+        errorDiv.innerText = 'Roll number and password pettali';
         return;
-      }
-      
-      try {
-        if (isLogin) {
-          await signInWithEmailAndPassword(auth, email, password);
+    }
+    
+    // 2. Replit API ki call pampu
+    try {
+        const response = await fetch('https://student-api--chvyshr.repl.co/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                roll: roll,
+                password: password
+            })
+        });
+        
+        const data = await response.json();
+        
+        // 3. Response check cheyyi
+        if(data.success){
+            alert('Welcome ' + data.student.name + ' 🎉');
+            window.location.href = 'dashboard.html';
         } else {
-          await createUserWithEmailAndPassword(auth, email, password);
+            errorDiv.innerText = 'Login Failed: ' + data.message;
         }
-        window.location.href = 'dashboard.html';
-      } catch (err) {
-        errorDiv.textContent = err.message.replace('Firebase: ', '');
-      }
-    };
+        
+    } catch (error) {
+        errorDiv.innerText = 'Server connect kaledu. Replit Run lo undo check cheyyi';
+    }
+};
   </script>
+  
+
+  
 </body>
 </html>
