@@ -1,65 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vyshnavi Login</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Segoe UI', sans-serif;
-      display: flex; justify-content: center; align-items: center;
-      height: 100vh; color: #fff;
-    }
-    .login-box {
-      background: rgba(255,255,255,0.1); padding: 40px; border-radius: 20px;
-      backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
-      width: 90%; max-width: 400px; text-align: center;
-    }
-    h1 { margin-bottom: 30px; color: #4ecdc4; }
-    input {
-      width: 100%; padding: 15px; margin: 10px 0; border: none;
-      border-radius: 10px; background: rgba(255,255,255,0.2);
-      color: #fff; font-size: 16px; outline: none;
-    }
-    input::placeholder { color: #ccc; }
-    button {
-      width: 100%; padding: 15px; margin-top: 20px; border: none;
-      border-radius: 10px; background: #4ecdc4; color: #000;
-      font-size: 18px; font-weight: bold; cursor: pointer;
-    }
-    button:hover { background: #45b7aa; }
-    #error { color: #ff6b6b; margin-top: 15px; height: 20px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #EFF6FF; padding: 10px; }
+       .container { max-width: 650px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; }
+       .header { background: #1E40AF; color: white; padding: 20px; text-align: center; position: relative; }
+       .school-name { font-size: 22px; font-weight: 700; }
+       .class-name { font-size: 14px; opacity: 0.9; margin-top: 5px; }
+       .logout { position: absolute; right: 15px; top: 15px; background: #1E3A8A; border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+       .tabs { display: flex; background: #DBEAFE; }
+       .tab { flex: 1; padding: 12px; border: none; background: #DBEAFE; font-weight: 600; cursor: pointer; }
+       .tab.active { background: white; color: #1E40AF; border-bottom: 3px solid #1E40AF; }
+       .page { display: none; padding: 15px; }
+       .page.active { display: block; }
+       .date-box { text-align: center; font-weight: 600; color: #1E40AF; margin-bottom: 15px; }
+       .add-student { background: #F0F9FF; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+       .add-student input { width: 100%; padding: 10px; margin: 5px 0; border: 2px solid #BFDBFE; border-radius: 8px; }
+       .add-student button { width: 100%; padding: 12px; background: #1E40AF; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 5px; }
+       .stats { display: flex; justify-content: space-around; background: #DBEAFE; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-weight: 600; }
+       .student { display: flex; justify-content: space-between; align-items: center; padding: 12px; margin: 8px 0; background: #FAFAFA; border-radius: 10px; border-left: 4px solid #1E40AF; }
+       .student-info { display: flex; align-items: center; gap: 10px; }
+       .student-photo { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #ddd; }
+       .roll-no { background: #1E40AF; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+       .student-name { font-weight: 600; margin-top: 2px; }
+       .status { font-size: 12px; color: #666; }
+       .btns button { padding: 6px 10px; border: none; border-radius: 6px; margin-left: 4px; font-weight: 600; cursor: pointer; font-size: 12px; }
+       .present { background: #16A34A; color: white; }
+       .absent { background: #DC2626; color: white; }
+       .photo { background: #0891B2; color: white; }
+       .delete { background: #64748B; color: white; }
+       .export-btn { width: 100%; margin-top: 15px; padding: 12px; background: #1E40AF; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        #loginScreen { max-width: 350px; margin: 50px auto; padding: 30px; background: white; border-radius: 15px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        #loginScreen input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; }
+        #loginScreen button { width: 100%; padding: 12px; background: #1E40AF; color: white; border: none; border-radius: 8px; font-weight: 600; }
+        #cameraModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; }
+        #video { width: 100%; max-width: 400px; margin: 50px auto; display: block; }
+       .camera-btns { text-align: center; margin-top: 20px; }
+       .camera-btns button { padding: 12px 20px; margin: 5px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+       .capture { background: #16A34A; color: white; }
+       .close { background: #DC2626; color: white; }
+       .settings-input { width: 100%; padding: 10px; margin: 5px 0 15px; border: 2px solid #BFDBFE; border-radius: 8px; }
+       .search-box { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #BFDBFE; border-radius: 8px; }
+    </style>
 </head>
 <body>
-  <div class="login-box">
-    <h1>Vyshnavi 💚 Login</h1>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="error"></p>
-  </div>
+    <div id="loginScreen">
+        <h2>🎓 Teacher Login</h2>
+        <p style="color:#666; margin:10px 0 20px;">Student Attendance System</p>
+        <input type="password" id="adminPass" placeholder="Teacher Password">
+        <button onclick="checkLogin()">Login</button>
+        <p style="font-size:12px; color:#999; margin-top:15px;">Default: teacher123</p>
+    </div>
 
-  <script>
-    // Already login ayyi unte direct dashboard ki pampistadi
-    if (localStorage.getItem('loggedIn') === 'true') {
-      window.location.href = 'dashboard.html';
-    }
-    function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  
-  // NUVVU KOTTEVI IKKADE SET CHEYYI
-  if (email === 'vyshnavi@gmail.com' && password === '123456') {
-    localStorage.setItem('loggedIn', 'true');
-    window.location.href = 'dashboard.html';
-  } else {
-    document.getElementById('error').textContent = 'Invalid email or password!';
-  }
-    }
-    
-  </script>
+    <div class="container" id="mainApp" style="display:none;">
+        <div class="header">
+            <div class="school-name" id="schoolTitle">Smart School</div>
+            <div class="class-name" id="classTitle">Class 10-A</div>
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showPage('daily', event)">Attendance</button>
+            <button class="tab" onclick="showPage('report', event)">Reports</button>
+            <button class="tab" onclick="showPage('settings', event)">Settings</button>
+        </div>
+
+        <div class="page active" id="dailyPage">
+            <div class="date-box" id="todayDate"></div>
+
+            <div class="add-student">
+                <input type="text" id="rollNo" placeholder="Roll No">
+                <input type="text" id="studentName" placeholder="Student Full Name">
+                <button onclick="addStudent()">+ Add Student</button>
+            </div>
+
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search Student..." oninput="renderList()">
+
+            <div class="stats">
+                <span>Present: <span id="presentCount">0</span></span>
+                <span>Absent: <span id="absentCount">0</span></span>
+                <span>Total: <span id="totalCount">0</span></span>
+            </div>
+            <div id="studentList"></div>
+            <button class="export-btn" onclick="exportTodayCSV()">📥 Download Today's Attendance</button>
+        </div>
+
+        <div class="page" id="reportPage">
+            <h3 style="text-align:center; color:#1E40AF; margin-bottom:15px;">Monthly Attendance %</h3>
+            <canvas id="monthlyChart"></canvas>
+            <button class="export-btn" onclick="exportMonthCSV()">📥 Download Month Report</button>
+        </div>
+
+        <div class="page" id="settingsPage">
+            <h3 style="text-align:center; color:#1E40AF; margin-bottom:15px;">Settings</h3>
+            <label style="font-weight:600;">School Name:</label>
+            <input type="text" class="settings-input" id="schoolNameInput" placeholder="Your School Name">
+            <label style="font-weight:600;">Class/Section:</label>
+            <input type="text" class="settings-input" id="classNameInput" placeholder="Ex: Class 10-A">
+            <label style="font-weight:600;">Change Password:</label>
+            <input type="password" class="settings-input" id="newPassInput" placeholder="New Password">
+            <button class="export-btn" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+    </div>
+
+    <div id="cameraModal">
+        <video id="video" autoplay></video>
+        <div class="camera-btns">
+            <button class="capture" onclick="capturePhoto()">📸 Capture</button>
+            <button class="close" onclick="closeCamera()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let ADMIN_PASS = localStorage.getItem('adminPass') || "teacher123";
+        let SCHOOL_NAME = localStorage.getItem('schoolName') || "Smart School";
+        let CLASS_NAME = localStorage.getItem('className') || "Class 10-A";
+        let today = new Date().toISOString().split('T')[0];
+        let currentPhotoStudent = null;
+        let stream = null;
+        let chartInstance = null;
+
+        document.getElementById('schoolTitle').innerText = SCHOOL_NAME;
+        document.getElementById('classTitle').innerText = CLASS_NAME;
+        document.getElementById('schoolNameInput').value = SCHOOL_NAME;
+        document.getElementById('classNameInput').value = CLASS_NAME;
+        document.getElementById('todayDate').innerText = "Date: " + today;
+
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        let attendance = JSON.parse(localStorage.getItem('attendance_' + today)) || {};
+        let photos = JSON.parse(localStorage.getItem('photos_' + today)) || {};
+
+        function checkLogin() {
+            if (document.getElementById('adminPass').value === ADMIN_PASS) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                renderList();
+            } else {
+                alert('Wrong Password!');
+            }
+        }
+
+        function logout() {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('adminPass').value = '';
+        }
+
+        function showPage(page, e) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            document.getElementById(page + 'Page').classList.add('active');
+            if (page === 'report') loadMonthlyChart();
+        }
+
+        function saveSettings() {
+            SCHOOL_NAME = document.getElementById('schoolNameInput').value || "Smart School";
+            CLASS_NAME = document.getElementById('classNameInput').value || "Class 10-A";
+            let newPass = document.getElementById('newPassInput').value;
+            if (newPass) ADMIN_PASS = newPass;
+
+            localStorage.setItem('schoolName', SCHOOL_NAME);
+            localStorage.setItem('className', CLASS_NAME);
+            localStorage.setItem('adminPass', ADMIN_PASS);
+            document.getElementById('schoolTitle').innerText = SCHOOL_NAME;
+            document.getElementById('classTitle').innerText = CLASS_NAME;
+            document.getElementById('newPassInput').value = '';
+            alert('Settings Saved!');
+        }
+
+        function saveData() {
+            localStorage.setItem('students', JSON.stringify(students));
+            localStorage.setItem('attendance_' + today, JSON.stringify(attendance));
+            localStorage.setItem('photos_' + today, JSON.stringify(photos));
+            renderList();
+        }
+
+        function addStudent() {
+            let roll = document.getElementById('rollNo').value.trim();
+            let name = document.getElementById('studentName').value.trim();
+            if (roll && name &&!students.find(s => s.roll === roll)) {
+                students.push({roll: roll, name: name});
+                document.getElementById('rollNo').value = '';
+                document.getElementById('studentName').value = '';
+                saveData();
+            }
+        }
+
+        function deleteStudent(roll) {
+            if (confirm('Delete Roll No ' + roll + '?')) {
+                students = students.filter(s => s.roll!== roll);
+                delete attendance[roll];
+                delete photos[roll];
+                saveData();
+            }
+        }
+
+        function markAttendance(roll, status) {
+            attendance[roll] = status;
+            if (status!== 'Present') delete photos[roll];
+            saveData();
+        }
+
+        async function openCamera(roll) {
+            currentPhotoStudent = roll;
+            document.getElementById('cameraModal').style.display = 'block';
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('video').srcObject = stream;
+            } catch (err) {
+                alert('Camera access denied!');
+            }
+        }
+
+        function closeCamera() {
+            if (stream) stream.getTracks().forEach(track => track.stop());
+            document.getElementById('cameraModal').style.display = 'none';
+        }
+
+        function capturePhoto() {
+            let video = document.getElementById('video');
+            let canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            photos[currentPhotoStudent] = canvas.toDataURL('image/jpeg', 0.5);
+            attendance[currentPhotoStudent] = 'Present';
+            closeCamera();
+            saveData();
+        }
+
+        function renderList() {
+            let list = document.getElementById('studentList');
+            let search = document.getElementById('searchBox').value.toLowerCase();
+            list.innerHTML = '';
+            let present = 0, absent = 0;
+
+            let filtered = students.filter(s =>
+                s.name.toLowerCase().includes(search) || s.roll.includes(search)
+            );
+
+            filtered.forEach(student => {
+                let status = attendance[student.roll];
+                let photoSrc = photos[student.roll] || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDUiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA0NSA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMi41IiBjeT0iMjIuNSIgcj0iMjIuNSIgZmlsbD0iI0RERERCIvPjxwYXRoIGQ9Ik0yMi41IDIyLjVDMjUuODAzMiAyMi41IDI4LjUgMTkuODAzMiAyOC41IDE2LjVDMjguNSAxMy4xOTY4IDI1LjgwMzIgMTAuNSAyMi41IDEwLjVDMTkuMTk2OCAxMC41IDE2LjUgMTMuMTk2OCAxNi41IDE2LjVDMTYuNSAxOS44MDMyIDE5LjE5NjggMjIuNSAyMi41IDIyLjVaTTEwLjUgMzEuNUMxMC41IDI2LjUzMTQgMTQuNTMxNCAyMi41IDE5LjUgMjIuNUgyNS41QzMwLjQ2ODYgMjIuNSAzNC41IDI2LjUzMTQgMzQuNSAzMS41VjM0LjVIMTAuNVYzMS41WiIgZmlsbD0iIzk5OTk5OSIvPjwvc3ZnPg==';
+                if (status === 'Present') present++;
+                if (status === 'Absent') absent++;
+
+                list.innerHTML += `
+                    <div class="student">
+                        <div class="student-info">
+                            <img src="${photoSrc}" class="student-photo">
+                            <div>
+                                <span class="roll-no">Roll ${student.roll}</span>
+                                <div class="student-name">${student.name}</div>
+                                <div class="status">${status || 'Not Marked'}</div>
+                            </div>
+                        </div>
+                        <div class="btns">
+                            <button class="photo" onclick="openCamera('${student.roll}')">📸</button>
+                            <button class="present" onclick="markAttendance('${student.roll}', 'Present')">P</button>
+                            <button class="absent" onclick="markAttendance('${student.roll}', 'Absent')">A</button>
+                            <button class="delete" onclick="deleteStudent('${student.roll}')">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('presentCount').innerText = present;
+            document.getElementById('absentCount').innerText = absent;
+            document.getElementById('totalCount').innerText = students.length;
+        }
+
+        function exportTodayCSV() {
+            let csv = 'Roll No,Student Name,Status,Date,Photo\n';
+            students.forEach(s => {
+                csv += `${s.roll},${s.name},${attendance[s.roll] || 'Not Marked'},${today},${photos[s.roll]? 'Yes' : 'No'}\n`;
+            });
+            downloadCSV(csv, `${SCHOOL_NAME}_${CLASS_NAME}_${today}.csv`);
+        }
+
+        function exportMonthCSV() {
+            let csv = 'Date,Roll No,Student Name,Status\n';
+            let currentMonth = today.substring(0, 7);
+            for (let i = 1; i <= 31; i++) {
+                let date = currentMonth + '-' + String(i).padStart(2, '0');
+                let dayAtt = JSON.parse(localStorage.getItem('attendance_' + date)) || {};
+                students.forEach(s => {
+                    if (dayAtt[s.roll]) csv += `${date},${s.roll},${s.name},${dayAtt[s.roll]}\n`;
+                });
+            }
+            downloadCSV(csv, `${SCHOOL_NAME}_Month_${currentMonth}.csv`);
+        }
+
+        function downloadCSV(csv, filename) {
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+
+        function loadMonthlyChart() {
+            let counts = {};
+            students.forEach(s => counts[s.roll] = 0);
+            let currentMonth = today.substring(0, 7);
+
+            for (let i = 1; i <= 31; i++) {
+                let date = currentMonth + '-' + String(i).padStart(2, '0');
+                let dayAtt = JSON.parse(localStorage.getItem('attendance_' + date)) || {};
+                Object.keys(dayAtt).forEach(roll => {
+                    if (dayAtt[roll] === 'Present' && counts[roll]!== undefined) counts[roll]++;
+                });
+            }
+
+            if (chartInstance) chartInstance.destroy();
+            let ctx = document.getElementById('monthlyChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: students.map(s => s.roll + '-' + s.name.split(' ')[0]),
+                    datasets: [{
+                        label: 'Present Days',
+                        data: students.map(s => counts[s.roll]),
+                        backgroundColor: '#1E40AF'
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        renderList();
+    </script>
 </body>
-</html>
+  </html>
