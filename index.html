@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SDMSMK - Student Attendance</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #667eea;
@@ -13,206 +14,64 @@
             --danger: #f44336;
             --warning: #ff9800;
             --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #333333;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-
-        body {
-            background: var(--gradient);
-            min-height: 100vh;
-            transition: all 0.3s ease;
-        }
-
-       .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-       .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-       .login-box h1 { color: var(--primary); margin-bottom: 10px; font-size: 28px; }
-       .login-box p { color: #666; margin-bottom: 30px; }
-
-       .input-group { margin-bottom: 20px; text-align: left; }
-       .input-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
-       .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-       .input-group input:focus { border-color: var(--primary); outline: none; }
-
-       .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--gradient);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-       .login-btn:hover { transform: translateY(-2px); }
-
-       .main-app { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
-
-       .header {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-       .header h1 { color: var(--primary); font-size: 24px; }
-       .header-right { display: flex; gap: 15px; align-items: center; }
-
-       .theme-btn,.logout-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-       .theme-btn { background: var(--primary); color: white; }
-       .logout-btn { background: var(--danger); color: white; }
-
-       .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-       .tab {
-            padding: 12px 25px;
-            border: none;
-            background: #f5f5f5;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            color: #666;
-        }
-       .tab.active { background: var(--gradient); color: white; }
-
-       .tab-content { display: none; }
-       .tab-content.active { display: block; }
-
-       .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-       .student-card {
-            background: white;
-            padding: 15px;
-            margin: 12px 0;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-left: 5px solid var(--primary);
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-       .student-info { display: flex; align-items: center; gap: 15px; }
-       .student-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 20px;
-        }
-
-       .student-details h3 { margin-bottom: 5px; color: #333; }
-       .student-details p { color: #666; font-size: 14px; }
-
-       .attendance-actions { display: flex; gap: 10px; }
-       .att-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-       .present { background: var(--success); color: white; }
-       .absent { background: var(--danger); color: white; }
-       .edit-btn { background: var(--warning); color: white; }
-
-       .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-       .modal.active { display: flex; }
-
-       .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-        }
-
-       .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-       .modal-header h2 { color: var(--primary); }
-       .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #666; }
-
-       .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-       .btn-primary { background: var(--primary); color: white; }
-       .btn-success { background: var(--success); color: white; }
-
+        body { background: var(--gradient); min-height: 100vh; transition: all 0.3s ease; color: var(--text-color); }
+        body.theme-dark { --bg-color: #1a1a2e; --card-bg: #16213e; --text-color: #ffffff; --gradient: linear-gradient(135deg, #0f3460 0%, #16213e 100%); }
+        body.theme-pink { --primary: #e91e63; --secondary: #c2185b; --gradient: linear-gradient(135deg, #e91e63 0%, #c2185b 100%); }
+        body.theme-green { --primary: #4caf50; --secondary: #388e3c; --gradient: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); }
+    .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .login-box { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 400px; text-align: center; }
+    .login-box h1 { color: var(--primary); margin-bottom: 10px; font-size: 28px; }
+    .login-box p { color: #666; margin-bottom: 30px; }
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label { display: block; margin-bottom: 8px; color: var(--text-color); font-weight: 500; }
+    .input-group input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; background: var(--card-bg); color: var(--text-color); }
+    .login-btn { width: 100%; padding: 14px; background: var(--gradient); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+    .main-app { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
+    .header { background: var(--card-bg); padding: 20px 30px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .header h1 { color: var(--primary); font-size: 24px; }
+    .header-right { display: flex; gap: 15px; align-items: center; }
+    .theme-btn,.logout-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .theme-btn { background: var(--primary); color: white; }
+    .logout-btn { background: var(--danger); color: white; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: var(--card-bg); padding: 15px; border-radius: 15px; overflow-x: auto; }
+    .tab { padding: 12px 25px; border: none; background: #f5f5f5; border-radius: 10px; cursor: pointer; font-weight: 600; color: #666; white-space: nowrap; }
+    .tab.active { background: var(--gradient); color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .card { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .student-card { background: var(--card-bg); padding: 15px; margin: 12px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 5px solid var(--primary); width: 100%; box-sizing: border-box; }
+    .student-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+    .student-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 20px; }
+    .student-details h3 { margin-bottom: 5px; color: var(--text-color); }
+    .student-details p { color: #666; font-size: 14px; }
+    .attendance-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .att-btn { padding: 8px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .present { background: var(--success); color: white; }
+    .absent { background: var(--danger); color: white; }
+    .edit-btn { background: var(--warning); color: white; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal.active { display: flex; }
+    .modal-content { background: var(--card-bg); padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; }
+    .theme-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+    .theme-option { padding: 20px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 600; border: 3px solid transparent; }
+    .theme-option.active { border-color: var(--primary); }
+    .theme-default { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .theme-dark-opt { background: linear-gradient(135deg, #0f3460 0%, #16213e 100%); color: white; }
+    .theme-pink-opt { background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%); color: white; }
+    .theme-green-opt { background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); color: white; }
         #today { color: #666; font-size: 14px; margin-top: 5px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+    .stat-card { background: var(--gradient); padding: 20px; border-radius: 12px; color: white; text-align: center; }
+    .stat-card h3 { font-size: 32px; margin-bottom: 5px; }
+    .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
     </style>
 </head>
 <body>
@@ -228,7 +87,6 @@
             <p style="margin-top: 20px; font-size: 13px; color: #999;">Default: teacher123</p>
         </div>
     </div>
-
     <div id="mainApp" class="main-app">
         <div class="header">
             <div>
@@ -240,209 +98,101 @@
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
         </div>
-
         <div class="tabs">
             <button class="tab active" onclick="switchTab('attendance', this)">📝 Attendance</button>
             <button class="tab" onclick="switchTab('students', this)">👥 Students</button>
             <button class="tab" onclick="switchTab('reports', this)">📊 Reports</button>
             <button class="tab" onclick="switchTab('settings', this)">⚙️ Settings</button>
         </div>
-
         <div id="attendance-tab" class="tab-content active">
             <div class="card">
                 <h2>Mark Attendance</h2>
                 <div id="studentsList"></div>
             </div>
-        </div>
-
         <div id="students-tab" class="tab-content">
             <div class="card">
                 <h2>All Students</h2>
                 <div id="allStudentsList"></div>
             </div>
         </div>
-
         <div id="reports-tab" class="tab-content">
             <div class="card">
-                <h2>Reports</h2>
-                <p>Reports will appear here</p>
+                <h2>📊 Attendance Reports</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><h3 id="totalStudents">0</h3><p>Total Students</p></div>
+                    <div class="stat-card"><h3 id="presentToday">0</h3><p>Present Today</p></div>
+                    <div class="stat-card"><h3 id="absentToday">0</h3><p>Absent Today</p></div>
+                </div>
+                <canvas id="attendanceChart" style="max-height: 400px;"></canvas>
             </div>
         </div>
-
         <div id="settings-tab" class="tab-content">
             <div class="card">
-                <h2>Settings</h2>
-                <p>Settings page working ✅</p>
+                <h2>⚙️ Settings</h2>
+                <div class="input-group"><label>School Name</label><input type="text" id="schoolName" value="SDMSMK"></div>
+                <div class="input-group"><label>Academic Year</label><input type="text" id="academicYear" value="2025-2026"></div>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                <button class="btn btn-success" onclick="exportData()">Export Data</button>
+                <button class="btn btn-danger" onclick="clearData()">Clear All Data</button>
             </div>
         </div>
     </div>
-
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Edit Student</h2>
-                <button class="close-btn" id="closeEditBtn">&times;</button>
+                <button class="close-btn" id="closeEditBtn" style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
             </div>
-            <div class="input-group">
-                <label>Name</label>
-                <input type="text" id="editName">
-            </div>
-            <div class="input-group">
-                <label>Roll No</label>
-                <input type="text" id="editRoll">
-            </div>
-            <div class="input-group">
-                <label>Class</label>
-                <input type="text" id="editClass">
-            </div>
+            <div class="input-group"><label>Name</label><input type="text" id="editName"></div>
+            <div class="input-group"><label>Roll No</label><input type="text" id="editRoll"></div>
+            <div class="input-group"><label>Class</label><input type="text" id="editClass"></div>
             <button class="btn btn-success" id="updateStudentBtn">Update</button>
         </div>
     </div>
-
+    <div id="themeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>🎨 Select Theme</h2>
+                <button class="close-btn" onclick="closeThemeSelector()" style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="theme-selector">
+                <div class="theme-option theme-default" onclick="setTheme('default')">Default Purple</div>
+                <div class="theme-option theme-dark-opt" onclick="setTheme('dark')">Dark Mode</div>
+                <div class="theme-option theme-pink-opt" onclick="setTheme('pink')">Pink</div>
+                <div class="theme-option theme-green-opt" onclick="setTheme('green')">Green</div>
+            </div>
+        </div>
+    </div>
     <script>
         let students = JSON.parse(localStorage.getItem('students') || '[]');
         let attendanceHistory = JSON.parse(localStorage.getItem('attendanceHistory') || '{}');
-        let settings = JSON.parse(localStorage.getItem('settings') || '{}');
+        let settings = JSON.parse(localStorage.getItem('settings') || '{"schoolName":"SDMSMK","academicYear":"2025-2026"}');
         let holidays = JSON.parse(localStorage.getItem('holidays') || '[]');
         let currentEditId = null;
-
-        function login() {
-            let pass = document.getElementById('password').value;
-            if(pass === 'teacher123') {
-                localStorage.setItem('loggedIn', 'true');
-                showApp();
-            } else {
-                alert('Wrong Password! Default: teacher123');
-            }
-        }
-
-        function showApp() {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.body.style.background = 'var(--gradient)';
-            document.getElementById('today').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            checkTodayHoliday();
-            renderStudents();
-        }
-
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            location.reload();
-        }
-
-        function switchTab(tabName, btn) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById(tabName + '-tab').classList.add('active');
-            if(tabName === 'reports') { updateReports(); renderCalendar(); }
-            if(tabName === 'students') renderAllStudents();
-        }
-
-        function renderStudents() {
-            let list = document.getElementById('studentsList');
-            if(students.length === 0) {
-                list.innerHTML = '<p>No students added yet</p>';
-                return;
-            }
-            list.innerHTML = students.map(s => `
-                <div class="student-card">
-                    <div class="student-info">
-                        <div class="student-avatar">${s.name.charAt(0)}</div>
-                        <div class="student-details">
-                            <h3>${s.name}</h3>
-                            <p>Roll: ${s.roll} | Class: ${s.class}</p>
-                        </div>
-                    </div>
-                    <div class="attendance-actions">
-                        <button class="att-btn present" onclick="markAttendance(${s.id}, 'present')">Present</button>
-                        <button class="att-btn absent" onclick="markAttendance(${s.id}, 'absent')">Absent</button>
-                        <button class="att-btn edit-btn" onclick="openEdit(${s.id})">✏️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderAllStudents() {
-            let list = document.getElementById('allStudentsList');
-            list.innerHTML = students.map(s => `
-                <div class="student-card">
-                    <div class="student-info">
-                        <div class="student-avatar">${s.name.charAt(0)}</div>
-                        <div class="student-details">
-                            <h3>${s.name}</h3>
-                            <p>Roll: ${s.roll} | Class: ${s.class}</p>
-                        </div>
-                    </div>
-                    <button class="att-btn edit-btn" onclick="openEdit(${s.id})">✏️ Edit</button>
-                </div>
-            `).join('');
-        }
-
-        function openEdit(id) {
-            let student = students.find(s => s.id === id);
-            currentEditId = id;
-            document.getElementById('editName').value = student.name;
-            document.getElementById('editRoll').value = student.roll;
-            document.getElementById('editClass').value = student.class;
-            document.getElementById('editModal').classList.add('active');
-        }
-
-        function closeEdit() {
-            document.getElementById('editModal').classList.remove('active');
-            currentEditId = null;
-        }
-
-        function updateStudent() {
-            if(currentEditId === null) return;
-            let student = students.find(s => s.id === currentEditId);
-            student.name = document.getElementById('editName').value;
-            student.roll = document.getElementById('editRoll').value;
-            student.class = document.getElementById('editClass').value;
-            localStorage.setItem('students', JSON.stringify(students));
-            renderStudents();
-            renderAllStudents();
-            closeEdit();
-        }
-
-        function markAttendance(id, status) {
-            let today = new Date().toISOString().split('T')[0];
-            if(!attendanceHistory[today]) attendanceHistory[today] = {};
-            attendanceHistory[today][id] = status;
-            localStorage.setItem('attendanceHistory', JSON.stringify(attendanceHistory));
-            alert('Marked ' + status);
-        }
-
-        function checkTodayHoliday() {
-            let today = new Date().toISOString().split('T')[0];
-            if(holidays.includes(today)) {
-                alert('Today is a holiday!');
-            }
-        }
-
-        function updateReports() {}
-        function renderCalendar() {}
-        function loadTheme() {}
-        function loadSettings() {}
-        function showThemeSelector() { alert('Theme selector coming soon'); }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTheme();
-            loadSettings();
-            if(localStorage.getItem('loggedIn') === 'true') {
-                showApp();
-            } else {
-                document.getElementById('loginPage').style.display = 'flex';
-                document.getElementById('mainApp').style.display = 'none';
-                document.body.style.background = '#f0f4f8';
-            }
-
-            document.getElementById('signInBtn').addEventListener('click', login);
-            document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('themeBtn').addEventListener('click', showThemeSelector);
-            document.getElementById('closeEditBtn').addEventListener('click', closeEdit);
-            document.getElementById('updateStudentBtn').addEventListener('click', updateStudent);
-        });
+        let attendanceChart = null;
+        function login() { let pass = document.getElementById('password').value; if(pass === 'teacher123') { localStorage.setItem('loggedIn', 'true'); showApp(); } else { alert('Wrong Password! Default: teacher123'); } }
+        function showApp() { document.getElementById('loginPage').style.display = 'none'; document.getElementById('mainApp').style.display = 'block'; document.getElementById('today').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); loadTheme(); loadSettings(); checkTodayHoliday(); renderStudents(); }
+        function logout() { localStorage.removeItem('loggedIn'); location.reload(); }
+        function switchTab(tabName, btn) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(tabName + '-tab').classList.add('active'); if(tabName === 'reports') updateReports(); if(tabName === 'students') renderAllStudents(); if(tabName === 'settings') loadSettingsForm(); }
+        function renderStudents() { let list = document.getElementById('studentsList'); if(students.length === 0) { list.innerHTML = '<p>No students added yet. Go to Students tab to add.</p>'; return; } list.innerHTML = students.map(s => `<div class="student-card"><div class="student-info"><div class="student-avatar">${s.name.charAt(0)}</div><div class="student-details"><h3>${s.name}</h3><p>Roll: ${s.roll} | Class: ${s.class}</p></div></div><div class="attendance-actions"><button class="att-btn present" onclick="markAttendance(${s.id}, 'present')">Present</button><button class="att-btn absent" onclick="markAttendance(${s.id}, 'absent')">Absent</button><button class="att-btn edit-btn" onclick="openEdit(${s.id})">✏️</button></div></div>`).join(''); }
+        function renderAllStudents() { let list = document.getElementById('allStudentsList'); if(students.length === 0) { list.innerHTML = '<p>No students yet</p>'; return; } list.innerHTML = students.map(s => `<div class="student-card"><div class="student-info"><div class="student-avatar">${s.name.charAt(0)}</div><div class="student-details"><h3>${s.name}</h3><p>Roll: ${s.roll} | Class: ${s.class}</p></div></div><button class="att-btn edit-btn" onclick="openEdit(${s.id})">✏️ Edit</button></div>`).join(''); }
+        function openEdit(id) { let student = students.find(s => s.id === id); currentEditId = id; document.getElementById('editName').value = student.name; document.getElementById('editRoll').value = student.roll; document.getElementById('editClass').value = student.class; document.getElementById('editModal').classList.add('active'); }
+        function closeEdit() { document.getElementById('editModal').classList.remove('active'); currentEditId = null; }
+        function updateStudent() { if(currentEditId === null) return; let student = students.find(s => s.id === currentEditId); student.name = document.getElementById('editName').value; student.roll = document.getElementById('editRoll').value; student.class = document.getElementById('editClass').value; localStorage.setItem('students', JSON.stringify(students)); renderStudents(); renderAllStudents(); closeEdit(); }
+        function markAttendance(id, status) { let today = new Date().toISOString().split('T')[0]; if(!attendanceHistory[today]) attendanceHistory[today] = {}; attendanceHistory[today][id] = status; localStorage.setItem('attendanceHistory', JSON.stringify(attendanceHistory)); alert('Marked ' + status); updateReports(); }
+        function updateReports() { let today = new Date().toISOString().split('T')[0]; let todayData = attendanceHistory[today] || {}; let present = Object.values(todayData).filter(s => s === 'present').length; let absent = Object.values(todayData).filter(s => s === 'absent').length; document.getElementById('totalStudents').textContent = students.length; document.getElementById('presentToday').textContent = present; document.getElementById('absentToday').textContent = absent; renderChart(present, absent); }
+        function renderChart(present, absent) { let ctx = document.getElementById('attendanceChart'); if(!ctx) return; if(attendanceChart) attendanceChart.destroy(); attendanceChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Present', 'Absent', 'Not Marked'], datasets: [{ data: [present, absent, students.length - present - absent], backgroundColor: ['#4CAF50', '#f44336', '#ff9800'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } } }); }
+        function showThemeSelector() { document.getElementById('themeModal').classList.add('active'); }
+        function closeThemeSelector() { document.getElementById('themeModal').classList.remove('active'); }
+        function setTheme(theme) { localStorage.setItem('theme', theme); loadTheme(); closeThemeSelector(); }
+        function loadTheme() { let theme = localStorage.getItem('theme') || 'default'; document.body.className = theme === 'default'? '' : 'theme-' + theme; }
+        function loadSettings() { if(settings.schoolName) { document.querySelector('.header h1').textContent = '🎓 ' + settings.schoolName + ' Attendance'; } }
+        function loadSettingsForm() { document.getElementById('schoolName').value = settings.schoolName || 'SDMSMK'; document.getElementById('academicYear').value = settings.academicYear || '2025-2026'; }
+        function saveSettings() { settings.schoolName = document.getElementById('schoolName').value; settings.academicYear = document.getElementById('academicYear').value; localStorage.setItem('settings', JSON.stringify(settings)); loadSettings(); alert('Settings saved!'); }
+        function exportData() { let data = { students: students, attendanceHistory: attendanceHistory, settings: settings, holidays: holidays }; let blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); let url = URL.createObjectURL(blob); let a = document.createElement('a'); a.href = url; a.download = `SDMSMK_Backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+        function clearData() { if(confirm('Are you sure? This will delete all data!')) { localStorage.clear(); location.reload(); } }
+        function checkTodayHoliday() { let today = new Date().toISOString().split('T')[0]; if(holidays.includes(today)) { alert('Today is a holiday!'); } }
+        document.addEventListener('DOMContentLoaded', function() { loadTheme(); if(localStorage.getItem('loggedIn') === 'true') { showApp(); } else { document.getElementById('loginPage').style.display = 'flex'; document.getElementById('mainApp').style.display = 'none'; document.body.style.background = '#f0f4f8'; } document.getElementById('signInBtn').addEventListener('click', login); document.getElementById('logoutBtn').addEventListener('click', logout); document.getElementById('themeBtn').addEventListener('click', showThemeSelector); document.getElementById('closeEditBtn').addEventListener('click', closeEdit); document.getElementById('updateStudentBtn').addEventListener('click', updateStudent); });
     </script>
 </body>
-    </html>
+                </html>
