@@ -48,7 +48,7 @@
             transition: all 0.3s ease;
         }
 
-      .login-screen {
+     .login-screen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -58,7 +58,7 @@
             z-index: 9999;
         }
 
-      .login-box {
+     .login-box {
             background: var(--bg-primary);
             padding: 40px;
             border-radius: 20px;
@@ -68,14 +68,14 @@
             text-align: center;
         }
 
-      .container {
+     .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             display: none;
         }
 
-      .header {
+     .header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 20px;
@@ -88,7 +88,7 @@
             gap: 15px;
         }
 
-      .tabs {
+     .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
@@ -96,7 +96,7 @@
             padding-bottom: 10px;
         }
 
-      .tab {
+     .tab {
             padding: 12px 24px;
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
@@ -106,13 +106,13 @@
             transition: all 0.3s;
         }
 
-      .tab.active {
+     .tab.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
 
-      .card {
+     .card {
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
             border-radius: 16px;
@@ -139,16 +139,16 @@
             transition: all 0.3s;
         }
 
-      .btn-primary {
+     .btn-primary {
             background: var(--primary);
             color: white;
         }
 
-      .btn-success { background: var(--success); color: white; }
-      .btn-danger { background: var(--danger); color: white; }
-      .btn-warning { background: var(--warning); color: white; }
+     .btn-success { background: var(--success); color: white; }
+     .btn-danger { background: var(--danger); color: white; }
+     .btn-warning { background: var(--warning); color: white; }
 
-      .student-card {
+     .student-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -161,17 +161,17 @@
             gap: 10px;
         }
 
-      .student-card.present { border-left: 4px solid var(--success); }
-      .student-card.absent { border-left: 4px solid var(--danger); }
+     .student-card.present { border-left: 4px solid var(--success); }
+     .student-card.absent { border-left: 4px solid var(--danger); }
 
-      .student-info {
+     .student-info {
             display: flex;
             align-items: center;
             gap: 15px;
             flex: 1;
         }
 
-      .student-avatar {
+     .student-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -185,23 +185,23 @@
             object-fit: cover;
         }
 
-      .color-grid {
+     .color-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             margin-top: 15px;
         }
 
-      .color-option {
+     .color-option {
             height: 50px;
             border-radius: 12px;
             cursor: pointer;
             border: 3px solid transparent;
         }
 
-      .color-option.active { border-color: var(--text-primary); }
+     .color-option.active { border-color: var(--text-primary); }
 
-      .modal {
+     .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -212,7 +212,7 @@
             padding: 20px;
         }
 
-      .modal-content {
+     .modal-content {
             background: var(--bg-primary);
             padding: 30px;
             border-radius: 20px;
@@ -222,14 +222,14 @@
             overflow-y: auto;
         }
 
-      .calendar {
+     .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
             margin-top: 15px;
         }
 
-      .calendar-day {
+     .calendar-day {
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -240,17 +240,17 @@
             font-size: 12px;
         }
 
-      .calendar-day.has-data { background: var(--primary); color: white; }
-      .calendar-day.today { border-color: var(--warning); font-weight: bold; }
+     .calendar-day.has-data { background: var(--primary); color: white; }
+     .calendar-day.today { border-color: var(--warning); font-weight: bold; }
 
-      .stats-grid {
+     .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-      .stat-card {
+     .stat-card {
             background: var(--bg-primary);
             padding: 20px;
             border-radius: 12px;
@@ -258,8 +258,8 @@
             text-align: center;
         }
 
-      .hidden { display: none; }
-      .toast {
+     .hidden { display: none; }
+     .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -273,10 +273,11 @@
         }
 
         @media (max-width: 768px) {
-          .color-grid { grid-template-columns: repeat(4, 1fr); }
-          .student-card { flex-direction: column; align-items: flex-start; }
+         .color-grid { grid-template-columns: repeat(4, 1fr); }
+         .student-card { flex-direction: column; align-items: flex-start; }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <!-- LOGIN SCREEN -->
@@ -342,7 +343,7 @@
             </div>
         </div>
 
-        <!-- STUDENTS TAB - FATHER/MOTHER NAME ADDED -->
+        <!-- STUDENTS TAB - FATHER/MOTHER NAME -->
         <div id="studentsTab" class="tab-content hidden">
             <div class="card">
                 <h2>Add New Student</h2>
@@ -381,7 +382,7 @@
             </div>
         </div>
 
-        <!-- RESULTS TAB -->
+        <!-- RESULTS TAB - PDF BUTTON ADDED -->
         <div id="resultsTab" class="tab-content hidden">
             <div class="card">
                 <h2>📊 Attendance Results</h2>
@@ -402,6 +403,7 @@
                         <p>Total Days</p>
                     </div>
                 </div>
+                <button class="btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="downloadPDF()">📄 Download PDF Report</button>
                 <div id="resultsList"></div>
             </div>
         </div>
@@ -434,7 +436,7 @@
         </div>
     </div>
 
-    <!-- EDIT MODAL - FATHER/MOTHER NAME ADDED -->
+    <!-- EDIT MODAL - FATHER/MOTHER NAME -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <h2>Edit Student</h2>
@@ -464,7 +466,7 @@
         </div>
     </div>
 
-    <!-- SMS MODAL - UPDATED WITH NAMES -->
+    <!-- SMS MODAL - WITH NAMES -->
     <div class="modal" id="smsModal">
         <div class="modal-content">
             <h2>📱 Send Absent Alert</h2>
@@ -481,7 +483,7 @@
             </div>
         </div>
     </div>
-       <div class="toast" id="toast"></div>
+        <div class="toast" id="toast"></div>
 
     <script>
         let students = JSON.parse(localStorage.getItem('students')) || [];
@@ -551,7 +553,7 @@
             if(tab === 'results') renderResults();
         }
 
-        // STUDENTS - FATHER/MOTHER NAME ADDED
+        // STUDENTS - FATHER/MOTHER NAME
         function addStudent() {
             let name = document.getElementById('studentName').value;
             let roll = document.getElementById('studentRoll').value;
@@ -779,7 +781,7 @@
 
             document.getElementById('absentDatesTitle').innerText = `${student.name} - Absent Dates`;
             document.getElementById('absentDatesList').innerHTML = dates.length > 0
-   ? dates.map(d => `<div style="padding: 10px; background: var(--bg-secondary); margin: 5px 0; border-radius: 8px;">📅 ${d}</div>`).join('')
+  ? dates.map(d => `<div style="padding: 10px; background: var(--bg-secondary); margin: 5px 0; border-radius: 8px;">📅 ${d}</div>`).join('')
                 : '<p style="text-align: center; padding: 20px;">No absent days! 🎉</p>';
             document.getElementById('absentDatesModal').style.display = 'flex';
         }
@@ -797,7 +799,7 @@
 
             document.getElementById('summaryDate').innerText = date;
             document.getElementById('absentList').innerHTML = absentStudents.length > 0
-   ? absentStudents.map(s => `• ${s.name} (${s.roll}) - ${s.class}`).join('<br>')
+  ? absentStudents.map(s => `• ${s.name} (${s.roll}) - ${s.class}`).join('<br>')
                 : '✅ All Present';
             document.getElementById('absentSummary').style.display = 'block';
         }
@@ -871,7 +873,7 @@
                 </div>
             `;
         }
-                // RESULTS
+           // RESULTS
         function renderResults() {
             let classFilter = document.getElementById('resultClassFilter')? document.getElementById('resultClassFilter').value : '';
             let filteredStudents = classFilter? students.filter(s => s.class === classFilter) : students;
@@ -917,6 +919,56 @@
             document.getElementById('resultsList').innerHTML = resultsHtml;
         }
 
+        // PDF DOWNLOAD
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let classFilter = document.getElementById('resultClassFilter')? document.getElementById('resultClassFilter').value : '';
+            let filteredStudents = classFilter? students.filter(s => s.class === classFilter) : students;
+            let totalDays = Object.keys(attendanceHistory).length;
+
+            doc.setFontSize(18);
+            doc.text('Smart Attendance Pro - Report', 14, 20);
+            doc.setFontSize(12);
+            doc.text(`Class: ${classFilter || 'All Classes'}`, 14, 30);
+            doc.text(`Total Students: ${filteredStudents.length}`, 14, 37);
+            doc.text(`Total Days: ${totalDays}`, 14, 44);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 51);
+
+            let y = 65;
+            doc.setFontSize(10);
+            doc.text('Roll', 14, y);
+            doc.text('Name', 35, y);
+            doc.text('Present', 100, y);
+            doc.text('Absent', 125, y);
+            doc.text('Percent', 150, y);
+            y += 7;
+            doc.line(14, y-5, 195, y-5);
+
+            filteredStudents.forEach(s => {
+                let present = 0, absent = 0;
+                for(let date in attendanceHistory) {
+                    if(attendanceHistory[date][s.id] === 'present') present++;
+                    if(attendanceHistory[date][s.id] === 'absent') absent++;
+                }
+                let total = present + absent;
+                let percent = total > 0? ((present / total) * 100).toFixed(1) : 0;
+
+                if(y > 270) { doc.addPage(); y = 20; }
+
+                doc.text(s.roll.substring(0,10), 14, y);
+                doc.text(s.name.substring(0,25), 35, y);
+                doc.text(String(present), 100, y);
+                doc.text(String(absent), 125, y);
+                doc.text(percent + '%', 150, y);
+                y += 7;
+            });
+
+            doc.save(`Attendance_${classFilter || 'All'}_${new Date().toISOString().split('T')[0]}.pdf`);
+            showToast('PDF Downloaded!');
+        }
+
         // THEME - 12 COLORS
         function toggleTheme() {
             let current = document.documentElement.getAttribute('data-theme');
@@ -949,4 +1001,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
