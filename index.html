@@ -48,7 +48,7 @@
             transition: all 0.3s ease;
         }
 
-   .login-screen {
+       .login-screen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -58,7 +58,7 @@
             z-index: 9999;
         }
 
-   .login-box {
+       .login-box {
             background: var(--bg-primary);
             padding: 40px;
             border-radius: 20px;
@@ -68,14 +68,14 @@
             text-align: center;
         }
 
-   .container {
+       .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             display: none;
         }
 
-   .header {
+       .header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 20px;
@@ -88,7 +88,7 @@
             gap: 15px;
         }
 
-   .tabs {
+       .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
@@ -96,7 +96,7 @@
             padding-bottom: 10px;
         }
 
-   .tab {
+       .tab {
             padding: 12px 24px;
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
@@ -106,13 +106,13 @@
             transition: all 0.3s;
         }
 
-   .tab.active {
+       .tab.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
 
-   .card {
+       .card {
             background: var(--bg-secondary);
             border: 2px solid var(--border-color);
             border-radius: 16px;
@@ -139,16 +139,16 @@
             transition: all 0.3s;
         }
 
-   .btn-primary {
+       .btn-primary {
             background: var(--primary);
             color: white;
         }
 
-   .btn-success { background: var(--success); color: white; }
-   .btn-danger { background: var(--danger); color: white; }
-   .btn-warning { background: var(--warning); color: white; }
+       .btn-success { background: var(--success); color: white; }
+       .btn-danger { background: var(--danger); color: white; }
+       .btn-warning { background: var(--warning); color: white; }
 
-   .student-card {
+       .student-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -161,17 +161,17 @@
             gap: 10px;
         }
 
-   .student-card.present { border-left: 4px solid var(--success); }
-   .student-card.absent { border-left: 4px solid var(--danger); }
+       .student-card.present { border-left: 4px solid var(--success); }
+       .student-card.absent { border-left: 4px solid var(--danger); }
 
-   .student-info {
+       .student-info {
             display: flex;
             align-items: center;
             gap: 15px;
             flex: 1;
         }
 
-   .student-avatar {
+       .student-avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -185,23 +185,23 @@
             object-fit: cover;
         }
 
-   .color-grid {
+       .color-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             margin-top: 15px;
         }
 
-   .color-option {
+       .color-option {
             height: 50px;
             border-radius: 12px;
             cursor: pointer;
             border: 3px solid transparent;
         }
 
-   .color-option.active { border-color: var(--text-primary); }
+       .color-option.active { border-color: var(--text-primary); }
 
-   .modal {
+       .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -212,7 +212,7 @@
             padding: 20px;
         }
 
-   .modal-content {
+       .modal-content {
             background: var(--bg-primary);
             padding: 30px;
             border-radius: 20px;
@@ -222,14 +222,14 @@
             overflow-y: auto;
         }
 
-   .calendar {
+       .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 5px;
             margin-top: 15px;
         }
 
-   .calendar-day {
+       .calendar-day {
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -240,17 +240,17 @@
             font-size: 12px;
         }
 
-   .calendar-day.has-data { background: var(--primary); color: white; }
-   .calendar-day.today { border-color: var(--warning); font-weight: bold; }
+       .calendar-day.has-data { background: var(--primary); color: white; }
+       .calendar-day.today { border-color: var(--warning); font-weight: bold; }
 
-   .stats-grid {
+       .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-   .stat-card {
+       .stat-card {
             background: var(--bg-primary);
             padding: 20px;
             border-radius: 12px;
@@ -258,8 +258,8 @@
             text-align: center;
         }
 
-   .hidden { display: none; }
-   .toast {
+       .hidden { display: none; }
+       .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -273,8 +273,8 @@
         }
 
         @media (max-width: 768px) {
-       .color-grid { grid-template-columns: repeat(4, 1fr); }
-       .student-card { flex-direction: column; align-items: flex-start; }
+           .color-grid { grid-template-columns: repeat(4, 1fr); }
+           .student-card { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -342,7 +342,7 @@
             </div>
         </div>
 
-        <!-- STUDENTS TAB -->
+        <!-- STUDENTS TAB - UPDATED WITH FATHER/MOTHER/ADDRESS -->
         <div id="studentsTab" class="tab-content hidden">
             <div class="card">
                 <h2>Add New Student</h2>
@@ -350,7 +350,9 @@
                 <input type="text" id="studentRoll" placeholder="Roll Number">
                 <input type="text" id="studentClass" placeholder="Class e.g: II AI" list="classList">
                 <datalist id="classList"></datalist>
-                <input type="tel" id="parentNumber" placeholder="Parent Mobile Number e.g: 9876543210">
+                <input type="tel" id="fatherNumber" placeholder="Father Mobile Number e.g: 9876543210">
+                <input type="tel" id="motherNumber" placeholder="Mother Mobile Number e.g: 9876543210">
+                <textarea id="studentAddress" placeholder="Address" rows="2"></textarea>
                 <input type="file" id="studentPhoto" accept="image/*">
                 <button class="btn-primary" style="width: 100%;" onclick="addStudent()">➕ Add Student</button>
             </div>
@@ -377,7 +379,7 @@
             </div>
         </div>
 
-        <!-- RESULTS TAB - BUG FIXED HERE -->
+        <!-- RESULTS TAB -->
         <div id="resultsTab" class="tab-content hidden">
             <div class="card">
                 <h2>📊 Attendance Results</h2>
@@ -425,13 +427,13 @@
                 <h2>📱 SMS Settings</h2>
                 <label><input type="checkbox" id="smsEnabled" checked> Show Send Message Option</label>
                 <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
-                    Absent mark cheste WhatsApp/SMS link vastundi. Nuvve click chesi pampali.
+                    Absent mark cheste WhatsApp/SMS link vastundi. Nuvve click chesi pampali. Father number ki preference istundi.
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- EDIT MODAL -->
+    <!-- EDIT MODAL - UPDATED -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <h2>Edit Student</h2>
@@ -439,7 +441,9 @@
             <input type="text" id="editName" placeholder="Name">
             <input type="text" id="editRoll" placeholder="Roll">
             <input type="text" id="editClass" placeholder="Class">
-            <input type="tel" id="editParent" placeholder="Parent Number">
+            <input type="tel" id="editFather" placeholder="Father Number">
+            <input type="tel" id="editMother" placeholder="Mother Number">
+            <textarea id="editAddress" placeholder="Address" rows="2"></textarea>
             <input type="file" id="editPhoto" accept="image/*">
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn-primary" style="flex: 1;" onclick="saveEdit()">💾 Save</button>
@@ -457,18 +461,18 @@
         </div>
     </div>
 
-    <!-- SMS MODAL -->
+    <!-- SMS MODAL - UPDATED FOR FATHER/MOTHER -->
     <div class="modal" id="smsModal">
         <div class="modal-content">
             <h2>📱 Send Absent Alert</h2>
             <p id="smsStudentName" style="margin: 15px 0; font-weight: bold;"></p>
             <textarea id="smsMessage" rows="4" style="width: 100%; margin-bottom: 15px;"></textarea>
             <div style="display: grid; gap: 10px;">
-                <a id="whatsappLink" target="_blank" style="text-decoration: none;">
-                    <button class="btn-success" style="width: 100%;">💬 Send via WhatsApp</button>
+                <a id="whatsappFatherLink" target="_blank" style="text-decoration: none;">
+                    <button class="btn-success" style="width: 100%;">💬 WhatsApp to Father</button>
                 </a>
-                <a id="smsLink" style="text-decoration: none;">
-                    <button class="btn-primary" style="width: 100%;">📲 Send via SMS</button>
+                <a id="whatsappMotherLink" target="_blank" style="text-decoration: none;">
+                    <button class="btn-success" style="width: 100%;">💬 WhatsApp to Mother</button>
                 </a>
                 <button class="btn-danger" onclick="closeSmsModal()">❌ Cancel</button>
             </div>
@@ -534,7 +538,7 @@
             if(document.getElementById('classList')) document.getElementById('classList').innerHTML = classes.map(c => `<option value="${c}">`).join('');
         }
 
-        // TABS - FIXED
+        // TABS
         function switchTab(tab, el) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
@@ -544,12 +548,14 @@
             if(tab === 'results') renderResults();
         }
 
-        // STUDENTS
+        // STUDENTS - FATHER/MOTHER/ADDRESS ADDED
         function addStudent() {
             let name = document.getElementById('studentName').value;
             let roll = document.getElementById('studentRoll').value;
             let cls = document.getElementById('studentClass').value;
-            let parent = document.getElementById('parentNumber').value;
+            let father = document.getElementById('fatherNumber').value;
+            let mother = document.getElementById('motherNumber').value;
+            let address = document.getElementById('studentAddress').value;
             let photoFile = document.getElementById('studentPhoto').files[0];
 
             if(!name ||!roll ||!cls) return alert('Name, Roll and Class required!');
@@ -561,21 +567,23 @@
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     photo = e.target.result;
-                    saveStudent(id, name, roll, cls, parent, photo);
+                    saveStudent(id, name, roll, cls, father, mother, address, photo);
                 };
                 reader.readAsDataURL(photoFile);
             } else {
-                saveStudent(id, name, roll, cls, parent, photo);
+                saveStudent(id, name, roll, cls, father, mother, address, photo);
             }
         }
 
-        function saveStudent(id, name, roll, cls, parent, photo) {
-            students.push({id, name, roll, class: cls, parentNumber: parent, photo});
+        function saveStudent(id, name, roll, cls, father, mother, address, photo) {
+            students.push({id, name, roll, class: cls, fatherNumber: father, motherNumber: mother, address, photo});
             localStorage.setItem('students', JSON.stringify(students));
             document.getElementById('studentName').value = '';
             document.getElementById('studentRoll').value = '';
             document.getElementById('studentClass').value = '';
-            document.getElementById('parentNumber').value = '';
+            document.getElementById('fatherNumber').value = '';
+            document.getElementById('motherNumber').value = '';
+            document.getElementById('studentAddress').value = '';
             document.getElementById('studentPhoto').value = '';
             updateClassDropdowns();
             renderStudents();
@@ -618,6 +626,7 @@
                                 </span>
                             </p>
                         </div>
+                    </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button class="btn-success" onclick="markAttendance(${s.id}, 'present')">✅ Present</button>
                         <button class="btn-danger" onclick="markAttendance(${s.id}, 'absent')">❌ Absent</button>
@@ -640,8 +649,11 @@
                         ${avatar}
                         <div>
                             <h3>${s.name}</h3>
-                            <p style="font-size: 13px;">Roll: ${s.roll} | Class: ${s.class}<br>Parent: ${s.parentNumber || 'N/A'}</p>
+                            <p style="font-size: 13px;">Roll: ${s.roll} | Class: ${s.class}<br>
+                            Father: ${s.fatherNumber || 'N/A'} | Mother: ${s.motherNumber || 'N/A'}<br>
+                            Address: ${s.address || 'N/A'}</p>
                         </div>
+                    </div>
                     <div style="display: flex; gap: 8px;">
                         <button class="btn-warning" onclick="editStudent(${s.id})">✏️ Edit</button>
                         <button class="btn-danger" onclick="deleteStudent(${s.id})">🗑️ Delete</button>
@@ -656,7 +668,9 @@
             document.getElementById('editName').value = s.name;
             document.getElementById('editRoll').value = s.roll;
             document.getElementById('editClass').value = s.class;
-            document.getElementById('editParent').value = s.parentNumber || '';
+            document.getElementById('editFather').value = s.fatherNumber || '';
+            document.getElementById('editMother').value = s.motherNumber || '';
+            document.getElementById('editAddress').value = s.address || '';
             document.getElementById('editModal').style.display = 'flex';
         }
 
@@ -681,7 +695,9 @@
             students[idx].name = document.getElementById('editName').value;
             students[idx].roll = document.getElementById('editRoll').value;
             students[idx].class = document.getElementById('editClass').value;
-            students[idx].parentNumber = document.getElementById('editParent').value;
+            students[idx].fatherNumber = document.getElementById('editFather').value;
+            students[idx].motherNumber = document.getElementById('editMother').value;
+            students[idx].address = document.getElementById('editAddress').value;
             localStorage.setItem('students', JSON.stringify(students));
             closeModal();
             updateClassDropdowns();
@@ -705,7 +721,7 @@
             document.getElementById('editModal').style.display = 'none';
         }
 
-        // ATTENDANCE - MANUAL SMS
+        // ATTENDANCE - FATHER/MOTHER SUPPORT
         function markAttendance(id, status) {
             let date = document.getElementById('attendanceDate').value;
             if(!date) return alert('Select date first!');
@@ -716,7 +732,7 @@
 
             if(status === 'absent') {
                 let student = students.find(s => s.id === id);
-                if(student.parentNumber && document.getElementById('smsEnabled').checked) {
+                if((student.fatherNumber || student.motherNumber) && document.getElementById('smsEnabled').checked) {
                     showSmsModal(student, date);
                 }
             }
@@ -751,7 +767,7 @@
 
             document.getElementById('absentDatesTitle').innerText = `${student.name} - Absent Dates`;
             document.getElementById('absentDatesList').innerHTML = dates.length > 0
-      ? dates.map(d => `<div style="padding: 10px; background: var(--bg-secondary); margin: 5px 0; border-radius: 8px;">📅 ${d}</div>`).join('')
+     ? dates.map(d => `<div style="padding: 10px; background: var(--bg-secondary); margin: 5px 0; border-radius: 8px;">📅 ${d}</div>`).join('')
                 : '<p style="text-align: center; padding: 20px;">No absent days! 🎉</p>';
             document.getElementById('absentDatesModal').style.display = 'flex';
         }
@@ -769,18 +785,31 @@
 
             document.getElementById('summaryDate').innerText = date;
             document.getElementById('absentList').innerHTML = absentStudents.length > 0
-      ? absentStudents.map(s => `• ${s.name} (${s.roll}) - ${s.class}`).join('<br>')
+     ? absentStudents.map(s => `• ${s.name} (${s.roll}) - ${s.class}`).join('<br>')
                 : '✅ All Present';
             document.getElementById('absentSummary').style.display = 'block';
         }
 
-        // MANUAL SMS
+        // MANUAL SMS - FATHER & MOTHER
         function showSmsModal(student, date) {
             let msg = `Respected Parent,\n\nYour child ${student.name} (Roll: ${student.roll}, Class: ${student.class}) was absent on ${date}.\n\nPlease contact school if this is incorrect.\n\n- Smart Attendance Pro`;
-            document.getElementById('smsStudentName').innerText = `${student.name} - ${student.parentNumber}`;
+            document.getElementById('smsStudentName').innerText = `${student.name}`;
             document.getElementById('smsMessage').value = msg;
-            document.getElementById('whatsappLink').href = `https://wa.me/91${student.parentNumber}?text=${encodeURIComponent(msg)}`;
-            document.getElementById('smsLink').href = `sms:${student.parentNumber}?body=${encodeURIComponent(msg)}`;
+
+            if(student.fatherNumber) {
+                document.getElementById('whatsappFatherLink').href = `https://wa.me/91${student.fatherNumber}?text=${encodeURIComponent(msg)}`;
+                document.getElementById('whatsappFatherLink').style.display = 'block';
+            } else {
+                document.getElementById('whatsappFatherLink').style.display = 'none';
+            }
+
+            if(student.motherNumber) {
+                document.getElementById('whatsappMotherLink').href = `https://wa.me/91${student.motherNumber}?text=${encodeURIComponent(msg)}`;
+                document.getElementById('whatsappMotherLink').style.display = 'block';
+            } else {
+                document.getElementById('whatsappMotherLink').style.display = 'none';
+            }
+
             document.getElementById('smsModal').style.display = 'flex';
         }
 
@@ -828,8 +857,7 @@
                 </div>
             `;
         }
-
-        // RESULTS
+             // RESULTS
         function renderResults() {
             let classFilter = document.getElementById('resultClassFilter')? document.getElementById('resultClassFilter').value : '';
             let filteredStudents = classFilter? students.filter(s => s.class === classFilter) : students;
@@ -905,7 +933,6 @@
             toast.style.display = 'block';
             setTimeout(() => toast.style.display = 'none', 3000);
         }
-        </script>
+    </script>
 </body>
 </html>
-    
