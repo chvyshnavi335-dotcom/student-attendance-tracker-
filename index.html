@@ -297,15 +297,23 @@
                 let calendarDate = new Date();
 
                 document.addEventListener('DOMContentLoaded', function() {
-                    loadTheme();
-                    loadSettings();
-                    if(localStorage.getItem('loggedIn') === 'true') { showApp(); }
-                    else {
-                        document.getElementById('loginPage').style.display = 'flex';
-                        document.getElementById('mainApp').style.display = 'none';
-                        document.body.style.background = '#f0f4f8';
-                    }
-
+            loadTheme();
+            loadSettings();
+            if(localStorage.getItem('loggedIn') === 'true') { 
+                showApp(); 
+            }
+            else {
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                document.body.style.background = '#f0f4f8';
+            }
+            
+            // IKKADA PASTE CHEY
+            document.getElementById('signInBtn').addEventListener('click', login);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('themeBtn').addEventListener('click', showThemeSelector);
+            // ...migilina event listeners
+});
                     document.getElementById('signInBtn').addEventListener('click', login);
                     document.getElementById('logoutBtn').addEventListener('click', logout);
                     document.getElementById('themeBtn').addEventListener('click', showThemeSelector);
@@ -808,6 +816,32 @@
             a.download = `SDMSMK_Backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
         }
+            function login() {
+            let pass = document.getElementById('password').value;
+            if(pass === 'teacher123') {
+                localStorage.setItem('loggedIn', 'true');
+                showApp();
+            } else {
+                alert('Wrong Password! Default: teacher123');
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.body.style.background = 'var(--gradient)';
+            document.getElementById('today').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            checkTodayHoliday();
+            updateClassFilter();
+            renderStudents();
+            updateReports();
+            renderCalendar();
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            location.reload();
+                }
     </script>
 </body>
 </html>
