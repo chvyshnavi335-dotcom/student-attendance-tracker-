@@ -529,28 +529,37 @@
         }
 
         // FIX 3: SMS LOG WORKING
-        function sendBulkSMS() {
-            let today = new Date().toISOString().split('T')[0];
-            let todayData = attendanceHistory[today] || {};
-            let absentStudents = students.filter(s => todayData[s.id] === 'absent');
-            if(absentStudents.length === 0) { alert('No absent students today!'); return; }
+       function sendBulkSMS() {
+    let today = new Date().toISOString().split('T')[0];
+    let todayData = attendanceHistory[today] || {};
+    let absentStudents = students.filter(s => todayData[s.id] === 'absent');
+    if(absentStudents.length === 0) { alert('No absent students today!'); return; }
 
-            let smsArray = [];
-            absentStudents.forEach(s => {
-                let msg = settings.smsTemplate.replace('{name}', s.name).replace('{date}', today);
-                let numbers = [];
-                if(s.fatherMobile) numbers.push(`Father: ${s.fatherMobile}`);
-                if(s.motherMobile) numbers.push(`Mother: ${s.motherMobile}`);
-                smsArray.push({name: s.name, numbers: numbers, msg: msg});
-            });
+    // SMS Log save chey - data safe
+    let smsArray = [];
+    absentStudents.forEach((s, index) => {
+        let msg = settings.smsTemplate.replace('{name}', s.name).replace('{date}', today);
+        let numbers = [];
+        if(s.fatherMobile) numbers.push(s.fatherMobile);
+        if(s.motherMobile) numbers.push(s.motherMobile);
+        smsArray.push({name: s.name, numbers: numbers, msg: msg});
 
-            if(!smsLog[today]) smsLog[today] = [];
-            smsLog[today] = smsLog[today].concat(smsArray);
-            localStorage.setItem('smsLog', JSON.stringify(smsLog));
-
-            showSMSLog();
-            alert(`SMS Sent to ${absentStudents.length} parents!\n\nNote: Browser nunchi actual SMS velladu. SMS Log chudu. Real SMS kavali ante Twilio API integrate cheyali.`);
+        // Phone SMS app open chey - delay tho open chesthe anni tabs open avutayi
+        let phoneNumber = s.fatherMobile || s.motherMobile;
+        if(phoneNumber) {
+            setTimeout(() => {
+                let smsLink = `sms:${phoneNumber}?body=${encodeURIComponent(msg)}`;
+                window.open(smsLink, '_blank');
+            }, index * 800); // 0.8 sec gap lo okkokati open avutundi
         }
+    });
+
+    if(!smsLog[today]) smsLog[today] = [];
+    smsLog[today] = smsLog[today].concat(smsArray);
+    localStorage.setItem('smsLog', JSON.stringify(smsLog));
+    showSMSLog();
+    alert(`SMS app open avthundi ${absentStudents.length} parents ki!\n\nPrathi tab lo Send nokku.`);
+                    } 
 
         function showSMSLog() {
             let today = new Date().toISOString().split('T')[0];
