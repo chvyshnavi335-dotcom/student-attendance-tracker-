@@ -324,21 +324,16 @@
 
         <!-- ATTENDANCE TAB -->
         <div id="attendanceTab" class="tab-content">
-            <div class="card">
-                <h2>Mark Attendance</h2>
-                <div style="display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap;">
-                    <input type="text" id="searchBox" placeholder="🔍 Search..." onkeyup="renderStudents()" style="flex: 1; min-width: 200px;">
-                    <input type="date" id="attendanceDate" onchange="renderStudents()">
-                </div>
-                <div id="studentsList"></div>
-
-                <div id="absentSummary" style="margin-top: 15px; padding: 15px; background: var(--bg-primary); border-radius: 12px; border-left: 4px solid var(--danger); display: none;">
-                    <h4 style="margin: 0 0 10px 0; color: var(--danger);">❌ Absent Students on <span id="summaryDate"></span></h4>
-                    <div id="absentList" style="font-size: 14px; line-height: 1.8;"></div>
-                </div>
-            </div>
+    <div class="card">
+        <h2>Mark Attendance</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0;">
+            <input type="text" id="searchBox" placeholder="🔍 Search..." onkeyup="renderStudents()">
+            <select id="classFilter" onchange="renderStudents()">
+                <option value="">All Classes</option>
+            </select>
+            <input type="date" id="attendanceDate" onchange="renderStudents()">
         </div>
-
+        <div id="studentsList"></div>
         <!-- STUDENTS TAB -->
         <div id="studentsTab" class="tab-content hidden">
             <div class="card">
@@ -447,8 +442,24 @@
     </div>
 
     <div class="toast" id="toast"></div>
-
-    <script>
+            <!-- SMS MODAL -->
+    <div class="modal" id="smsModal">
+        <div class="modal-content">
+            <h2>📱 Send Absent Alert</h2>
+            <p id="smsStudentName" style="margin: 15px 0; font-weight: bold;"></p>
+            <textarea id="smsMessage" rows="4" style="width: 100%; margin-bottom: 15px;"></textarea>
+            <div style="display: grid; gap: 10px;">
+                <a id="whatsappLink" target="_blank" style="text-decoration: none;">
+                    <button class="btn-success" style="width: 100%;">💬 Send via WhatsApp</button>
+                </a>
+                <a id="smsLink" style="text-decoration: none;">
+                    <button class="btn-primary" style="width: 100%;">📲 Send via SMS</button>
+                </a>
+                <button class="btn-danger" onclick="closeSmsModal()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+     <script>
         let students = JSON.parse(localStorage.getItem('students')) || [];
         let attendanceHistory = JSON.parse(localStorage.getItem('attendanceHistory')) || {};
         let currentUser = localStorage.getItem('currentUser') || '';
