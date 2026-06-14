@@ -8,92 +8,122 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #3b82f6;
-            --secondary: #1e40af;
+            --primary: #f97316;
+            --secondary: #ea580c;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --gradient: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            --bg-color: #f0f4f8;
+            --gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            --bg-color: #fff7ed;
             --card-bg: #ffffff;
             --text-color: #1f2937;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--gradient); min-height: 100vh; transition: all 0.3s ease; color: var(--text-color); }
-        body.theme-dark { --primary: #6366f1; --gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); --card-bg: #1e293b; --text-color: #f1f5f9; }
-        body.theme-pink { --primary: #ec4899; --gradient: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
-        body.theme-green { --primary: #10b981; --gradient: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        body.theme-orange { --primary: #f97316; --gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-        body.theme-purple { --primary: #a855f7; --gradient: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
-        body.theme-red { --primary: #dc2626; --gradient: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
-        body.theme-teal { --primary: #14b8a6; --gradient: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); }
-        body.theme-yellow { --primary: #eab308; --gradient: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
-        body.theme-indigo { --primary: #6366f1; --gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
-        body.theme-cyan { --primary: #06b6d4; --gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
-        body.theme-rose { --primary: #f43f5e; --gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); }
-       .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-       .login-box { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 450px; text-align: center; }
-       .login-box h1 { color: var(--primary); margin-bottom: 10px; font-size: 28px; }
-       .login-box p { color: #666; margin-bottom: 20px; }
-       .input-group { margin-bottom: 20px; text-align: left; }
-       .input-group label { display: block; margin-bottom: 8px; color: var(--text-color); font-weight: 500; }
-       .input-group input,.input-group select,.input-group textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; background: var(--card-bg); color: var(--text-color); }
-       .login-btn { width: 100%; padding: 14px; background: var(--gradient); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
-       .main-app { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
-       .header { background: var(--card-bg); padding: 20px 30px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-       .header h1 { color: var(--primary); font-size: 24px; }
-       .header-right { display: flex; gap: 15px; align-items: center; }
-       .theme-btn,.logout-btn,.guide-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-       .theme-btn { background: var(--primary); color: white; }
-       .logout-btn { background: var(--danger); color: white; }
-       .guide-btn { background: var(--success); color: white; }
-       .tabs { display: flex; gap: 10px; margin-bottom: 20px; background: var(--card-bg); padding: 15px; border-radius: 15px; overflow-x: auto; }
-       .tab { padding: 12px 25px; border: none; background: #f5f5f5; border-radius: 10px; cursor: pointer; font-weight: 600; color: #666; white-space: nowrap; }
-       .tab.active { background: var(--gradient); color: white; }
-       .tab-content { display: none; }
-       .tab-content.active { display: block; }
-       .card { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
-       .student-card { background: var(--card-bg); padding: 15px; margin: 12px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 5px solid var(--primary); width: 100%; }
-       .student-info { display: flex; align-items: center; gap: 15px; flex: 1; }
-       .student-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 20px; }
-       .student-details h3 { margin-bottom: 5px; color: var(--text-color); }
-       .student-details p { color: #666; font-size: 14px; }
-       .attendance-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-       .att-btn { padding: 8px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-       .present { background: var(--success); color: white; }
-       .absent { background: var(--danger); color: white; }
-       .edit-btn { background: var(--warning); color: white; }
-       .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; }
-       .modal.active { display: flex; }
-       .modal-content { background: var(--card-bg); padding: 30px; border-radius: 15px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; margin: 20px; }
-       .theme-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-       .theme-option { padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 600; border: 3px solid transparent; font-size: 13px; }
-       .theme-option.active { border-color: var(--primary); }
-       .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
-       .stat-card { background: var(--gradient); padding: 20px; border-radius: 12px; color: white; text-align: center; }
-       .stat-card h3 { font-size: 32px; margin-bottom: 5px; }
-       .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px; }
-       .btn-primary { background: var(--primary); color: white; }
-       .btn-success { background: var(--success); color: white; }
-       .btn-danger { background: var(--danger); color: white; }
-       .btn-warning { background: var(--warning); color: white; }
-       .class-filter { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-       .class-btn { padding: 8px 16px; border: 2px solid var(--primary); background: white; color: var(--primary); border-radius: 8px; cursor: pointer; font-weight: 600; }
-       .class-btn.active { background: var(--primary); color: white; }
-       .calendar { background: var(--card-bg); padding: 20px; border-radius: 15px; margin: 20px 0; }
-       .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-       .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-       .calendar-day { padding: 10px; text-align: center; border-radius: 8px; background: #f5f5f5; cursor: pointer; }
-       .calendar-day.present { background: var(--success); color: white; }
-       .calendar-day.absent { background: var(--danger); color: white; }
-       .instructions { background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid var(--primary); }
-       .instructions h3 { color: var(--primary); margin-bottom: 15px; }
-       .instructions ol { margin-left: 20px; }
-       .instructions li { margin: 10px 0; color: var(--text-color); }
-       .parent-info { background: #fff3cd; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid var(--warning); }
+        body { background: var(--bg-color); min-height: 100vh; transition: all 0.3s ease; color: var(--text-color); }
+        body.theme-dark { --primary: #6366f1; --gradient: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); --card-bg: #1e293b; --text-color: #f1f5f9; --bg-color: #0f172a; }
+        body.theme-pink { --primary: #ec4899; --gradient: linear-gradient(135deg, #ec4899 0%, #be185d 100%); --bg-color: #fdf2f8; }
+        body.theme-green { --primary: #10b981; --gradient: linear-gradient(135deg, #10b981 0%, #059669 100%); --bg-color: #f0fdf4; }
+        body.theme-blue { --primary: #3b82f6; --gradient: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); --bg-color: #eff6ff; }
+        body.theme-purple { --primary: #a855f7; --gradient: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); --bg-color: #faf5ff; }
+        body.theme-red { --primary: #dc2626; --gradient: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); --bg-color: #fef2f2; }
+        body.theme-teal { --primary: #14b8a6; --gradient: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); --bg-color: #f0fdfa; }
+        body.theme-yellow { --primary: #eab308; --gradient: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); --bg-color: #fefce8; }
+        body.theme-indigo { --primary: #6366f1; --gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); --bg-color: #eef2ff; }
+        body.theme-cyan { --primary: #06b6d4; --gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); --bg-color: #ecfeff; }
+        body.theme-rose { --primary: #f43f5e; --gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); --bg-color: #fff1f2; }
+
+      .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; background: var(--gradient); }
+      .login-box { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 450px; text-align: center; }
+      .login-box h1 { color: var(--primary); margin-bottom: 10px; font-size: 28px; }
+      .login-box p { color: #666; margin-bottom: 20px; }
+      .input-group { margin-bottom: 20px; text-align: left; }
+      .input-group label { display: block; margin-bottom: 8px; color: var(--text-color); font-weight: 500; }
+      .input-group input,.input-group select,.input-group textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; background: var(--card-bg); color: var(--text-color); }
+      .login-btn { width: 100%; padding: 14px; background: var(--gradient); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+
+      .main-app { display: none; min-height: 100vh; background: var(--bg-color); }
+      .header { background: var(--card-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+      .header h1 { color: var(--primary); font-size: 20px; }
+      .header-right { display: flex; gap: 10px; align-items: center; }
+      .icon-btn { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; }
+      .theme-btn { background: var(--primary); color: white; }
+      .logout-btn { background: var(--danger); color: white; }
+      .guide-btn { background: var(--success); color: white; }
+
+      .container { padding: 15px; max-width: 100%; }
+      .tabs { display: flex; gap: 8px; margin-bottom: 15px; background: var(--card-bg); padding: 12px; border-radius: 15px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+      .tab { padding: 10px 20px; border: none; background: #f5f5f5; border-radius: 10px; cursor: pointer; font-weight: 600; color: #666; white-space: nowrap; font-size: 14px; }
+      .tab.active { background: var(--gradient); color: white; }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+      .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 15px; }
+      .card h2 { font-size: 18px; margin-bottom: 15px; color: var(--text-color); }
+
+      .student-card { background: var(--card-bg); padding: 15px; margin: 12px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 5px solid var(--primary); position: relative; }
+      .student-card.marked-present { border-left-color: var(--success); }
+      .student-card.marked-absent { border-left-color: var(--danger); }
+      .student-info { display: flex; align-items: flex-start; gap: 12px; flex: 1; }
+      .student-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px; flex-shrink: 0; }
+      .student-details h3 { margin-bottom: 4px; color: var(--text-color); font-size: 16px; }
+      .student-details p { color: #666; font-size: 13px; margin: 2px 0; }
+      .status-badge { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+      .status-badge.present { background: var(--success); color: white; }
+      .status-badge.absent { background: var(--danger); color: white; }
+      .attendance-actions { display: flex; flex-direction: column; gap: 6px; margin-left: 10px; }
+      .att-btn { padding: 8px 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; white-space: nowrap; }
+      .present { background: var(--success); color: white; }
+      .absent { background: var(--danger); color: white; }
+      .edit-btn { background: var(--warning); color: white; }
+      .att-btn.active { box-shadow: 0 0 0 3px rgba(0,0,0,0.2); transform: scale(0.95); }
+
+      .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 15px; }
+      .modal.active { display: flex; }
+      .modal-content { background: var(--card-bg); padding: 25px; border-radius: 15px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+
+      .theme-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+      .theme-option { padding: 12px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 600; border: 3px solid transparent; font-size: 12px; }
+      .theme-option.active { border-color: var(--primary); }
+
+      .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 15px 0; }
+      .stat-card { background: var(--gradient); padding: 15px; border-radius: 12px; color: white; text-align: center; }
+      .stat-card h3 { font-size: 24px; margin-bottom: 5px; }
+      .stat-card p { font-size: 12px; }
+      .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px 0; width: 100%; font-size: 14px; }
+      .btn-primary { background: var(--primary); color: white; }
+      .btn-success { background: var(--success); color: white; }
+      .btn-danger { background: var(--danger); color: white; }
+      .btn-warning { background: var(--warning); color: white; }
+
+      .class-filter { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+      .class-btn { padding: 8px 14px; border: 2px solid var(--primary); background: white; color: var(--primary); border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+      .class-btn.active { background: var(--primary); color: white; }
+
+      .calendar { background: var(--card-bg); padding: 15px; border-radius: 15px; margin: 15px 0; }
+      .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+      .calendar-header h3 { font-size: 16px; }
+      .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+      .calendar-day { padding: 8px 4px; text-align: center; border-radius: 8px; background: #f5f5f5; cursor: pointer; font-size: 13px; }
+      .calendar-day.present { background: var(--success); color: white; }
+      .calendar-day.absent { background: var(--danger); color: white; }
+
+      .instructions { background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--primary); font-size: 14px; }
+      .instructions h3 { color: var(--primary); margin-bottom: 10px; font-size: 16px; }
+      .instructions ol { margin-left: 18px; }
+      .instructions li { margin: 8px 0; color: var(--text-color); }
+
+      .parent-info { background: #fff3cd; padding: 10px; border-radius: 8px; margin: 8px 0; border-left: 3px solid var(--warning); font-size: 12px; }
+
+      .sms-log { background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; max-height: 300px; overflow-y: auto; }
+      .sms-item { background: white; padding: 10px; border-radius: 8px; margin: 8px 0; border-left: 3px solid var(--primary); font-size: 13px; }
+
+       @media (min-width: 768px) {
+          .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+          .student-card { padding: 20px; }
+          .att-btn { padding: 10px 18px; font-size: 14px; }
+       }
     </style>
 </head>
-<body>
+    <body>
     <div id="loginPage" class="login-container">
         <div class="login-box">
             <h1>🎓 Teacher Login</h1>
@@ -115,106 +145,112 @@
         <div class="header">
             <div>
                 <h1>🎓 SDMSMK Attendance</h1>
-                <div id="today"></div>
+                <div id="today" style="font-size: 12px; color: #666;"></div>
             </div>
             <div class="header-right">
-                <button class="guide-btn" onclick="showGuide()">📖 Guide</button>
-                <button class="theme-btn" id="themeBtn">🎨 Theme</button>
-                <button class="logout-btn" id="logoutBtn">Logout</button>
+                <button class="icon-btn guide-btn" onclick="showGuide()">📖</button>
+                <button class="icon-btn theme-btn" id="themeBtn">🎨</button>
+                <button class="icon-btn logout-btn" id="logoutBtn">Logout</button>
             </div>
         </div>
 
-        <div class="instructions" id="guideBox" style="display:none;">
-            <h3>📖 How to Use - Ela Use Cheyali</h3>
-            <ol>
-                <li><b>Attendance Tab:</b> Students ki Present/Absent mark cheyandi. Edit button tho details marchandi.</li>
-                <li><b>Class Filter:</b> Paina class buttons nokki aa class students matrame chudandi.</li>
-                <li><b>Absent SMS:</b> "Send Absent SMS" button nokkithe absent students parents ki oke sari msg velthundi.</li>
-                <li><b>Calendar:</b> Reports lo date select chesi aa roju attendance chudandi.</li>
-                <li><b>Student Details:</b> Student add chesetappudu Father Number, Mother Number, Address ivvandi.</li>
-                <li><b>Themes:</b> 12 colors unnayi. Nచ్చina color select chesukondi.</li>
-                <li><b>Data Backup:</b> Settings lo Export Data nokki backup teesukondi. Data miss avvadhu.</li>
-            </ol>
-        </div>
-
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('attendance', this)">📝 Attendance</button>
-            <button class="tab" onclick="switchTab('students', this)">👥 Students</button>
-            <button class="tab" onclick="switchTab('reports', this)">📊 Reports</button>
-            <button class="tab" onclick="switchTab('calendar', this)">📅 Calendar</button>
-            <button class="tab" onclick="switchTab('settings', this)">⚙️ Settings</button>
-        </div>
-
-        <div id="attendance-tab" class="tab-content active">
-            <div class="card">
-                <h2>Mark Attendance</h2>
-                <div class="class-filter" id="classFilter"></div>
-                <button class="btn btn-warning" onclick="sendBulkSMS()" style="margin-bottom: 15px;">📱 Send Absent SMS to All Parents</button>
-                <div id="studentsList"></div>
+        <div class="container">
+            <div class="instructions" id="guideBox" style="display:none;">
+                <h3>📖 How to Use - Ela Use Cheyali</h3>
+                <ol>
+                    <li><b>Attendance:</b> Present/Absent button nokkandi. Color marutundi.</li>
+                    <li><b>Class Filter:</b> Class buttons nokki aa class chudandi.</li>
+                    <li><b>Absent SMS:</b> Button nokkithe absent parents ki msg log vastundi.</li>
+                    <li><b>Calendar:</b> Date nokki aa roju attendance chudandi.</li>
+                    <li><b>Student Add:</b> Father/Mother number, Address ivvandi.</li>
+                    <li><b>Themes:</b> 12 colors unnayi.</li>
+                    <li><b>Backup:</b> Settings lo Export nokki data save cheyandi.</li>
+                </ol>
             </div>
-        </div>
 
-        <div id="students-tab" class="tab-content">
-            <div class="card">
-                <h2>Add New Student</h2>
-                <div class="input-group"><label>Student Name</label><input type="text" id="newName"></div>
-                <div class="input-group"><label>Roll No</label><input type="text" id="newRoll"></div>
-                <div class="input-group"><label>Class/Section</label><input type="text" id="newClass"></div>
-                <div class="input-group"><label>Father Name</label><input type="text" id="newFatherName"></div>
-                <div class="input-group"><label>Father Mobile</label><input type="tel" id="newFatherMobile"></div>
-                <div class="input-group"><label>Mother Name</label><input type="text" id="newMotherName"></div>
-                <div class="input-group"><label>Mother Mobile</label><input type="tel" id="newMotherMobile"></div>
-                <div class="input-group"><label>Address</label><textarea id="newAddress" rows="3"></textarea></div>
-                <button class="btn btn-primary" onclick="addStudent()">+ Add Student</button>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('attendance', this)">📝 Attendance</button>
+                <button class="tab" onclick="switchTab('students', this)">👥 Students</button>
+                <button class="tab" onclick="switchTab('reports', this)">📊 Reports</button>
+                <button class="tab" onclick="switchTab('calendar', this)">📅 Calendar</button>
+                <button class="tab" onclick="switchTab('settings', this)">⚙️ Settings</button>
             </div>
-            <div class="card">
-                <h2>All Students</h2>
-                <div id="allStudentsList"></div>
-            </div>
-        </div>
 
-        <div id="reports-tab" class="tab-content">
-            <div class="card">
-                <h2>📊 Attendance Reports</h2>
-                <div class="stats-grid">
-                    <div class="stat-card"><h3 id="totalStudents">0</h3><p>Total Students</p></div>
-                    <div class="stat-card"><h3 id="presentToday">0</h3><p>Present Today</p></div>
-                    <div class="stat-card"><h3 id="absentToday">0</h3><p>Absent Today</p></div>
-                </div>
-                <canvas id="attendanceChart" style="max-height: 400px;"></canvas>
-            </div>
-        </div>
-
-        <div id="calendar-tab" class="tab-content">
-            <div class="card">
-                <h2>📅 Attendance Calendar</h2>
-                <div class="calendar">
-                    <div class="calendar-header">
-                        <button class="btn btn-primary" onclick="prevMonth()">← Prev</button>
-                        <h3 id="currentMonth"></h3>
-                        <button class="btn btn-primary" onclick="nextMonth()">Next →</button>
+            <div id="attendance-tab" class="tab-content active">
+                <div class="card">
+                    <h2>Mark Attendance</h2>
+                    <div class="class-filter" id="classFilter"></div>
+                    <button class="btn btn-warning" onclick="sendBulkSMS()">📱 Send Absent SMS to All Parents</button>
+                    <div id="smsLog" class="sms-log" style="display:none;">
+                        <h4 style="margin-bottom:10px;">📱 SMS Log - Today</h4>
+                        <div id="smsLogContent"></div>
                     </div>
-                    <div class="calendar-grid" id="calendarGrid"></div>
+                    <div id="studentsList"></div>
                 </div>
             </div>
-        </div>
 
-        <div id="settings-tab" class="tab-content">
-            <div class="card">
-                <h2>⚙️ Settings</h2>
-                <div class="input-group"><label>School Name</label><input type="text" id="schoolName" value="SDMSMK"></div>
-                <div class="input-group"><label>Academic Year</label><input type="text" id="academicYear" value="2025-2026"></div>
-                <div class="input-group"><label>SMS Template</label><textarea id="smsTemplate" rows="3">Dear Parent, Your child {name} is absent today {date}. -SDMSMK</textarea></div>
-                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-                <button class="btn btn-success" onclick="exportData()">📥 Export Backup</button>
-                <button class="btn btn-danger" onclick="clearData()">🗑️ Clear All Data</button>
+            <div id="students-tab" class="tab-content">
+                <div class="card">
+                    <h2>Add New Student</h2>
+                    <div class="input-group"><label>Student Name</label><input type="text" id="newName"></div>
+                    <div class="input-group"><label>Roll No</label><input type="text" id="newRoll"></div>
+                    <div class="input-group"><label>Class/Section</label><input type="text" id="newClass"></div>
+                    <div class="input-group"><label>Father Name</label><input type="text" id="newFatherName"></div>
+                    <div class="input-group"><label>Father Mobile</label><input type="tel" id="newFatherMobile"></div>
+                    <div class="input-group"><label>Mother Name</label><input type="text" id="newMotherName"></div>
+                    <div class="input-group"><label>Mother Mobile</label><input type="tel" id="newMotherMobile"></div>
+                    <div class="input-group"><label>Address</label><textarea id="newAddress" rows="2"></textarea></div>
+                    <button class="btn btn-primary" onclick="addStudent()">+ Add Student</button>
+                </div>
+                <div class="card">
+                    <h2>All Students</h2>
+                    <div id="allStudentsList"></div>
+                </div>
+            </div>
+
+            <div id="reports-tab" class="tab-content">
+                <div class="card">
+                    <h2>📊 Attendance Reports</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3 id="totalStudents">0</h3><p>Total</p></div>
+                        <div class="stat-card"><h3 id="presentToday">0</h3><p>Present</p></div>
+                        <div class="stat-card"><h3 id="absentToday">0</h3><p>Absent</p></div>
+                    </div>
+                    <canvas id="attendanceChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <div id="calendar-tab" class="tab-content">
+                <div class="card">
+                    <h2>📅 Attendance Calendar</h2>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="btn btn-primary" onclick="prevMonth()" style="width:auto;padding:8px 12px;">←</button>
+                            <h3 id="currentMonth"></h3>
+                            <button class="btn btn-primary" onclick="nextMonth()" style="width:auto;padding:8px 12px;">→</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-tab" class="tab-content">
+                <div class="card">
+                    <h2>⚙️ Settings</h2>
+                    <div class="input-group"><label>School Name</label><input type="text" id="schoolName" value="SDMSMK"></div>
+                    <div class="input-group"><label>Academic Year</label><input type="text" id="academicYear" value="2025-2026"></div>
+                    <div class="input-group"><label>SMS Template</label><textarea id="smsTemplate" rows="3">Dear Parent, Your child {name} is absent today {date}. -SDMSMK</textarea></div>
+                    <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                    <button class="btn btn-success" onclick="exportData()">📥 Export Backup</button>
+                    <button class="btn btn-danger" onclick="clearData()">🗑️ Clear All Data</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h2>Edit Student</h2>
                 <button onclick="closeEdit()" style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
             </div>
@@ -225,7 +261,7 @@
             <div class="input-group"><label>Father Mobile</label><input type="tel" id="editFatherMobile"></div>
             <div class="input-group"><label>Mother Name</label><input type="text" id="editMotherName"></div>
             <div class="input-group"><label>Mother Mobile</label><input type="tel" id="editMotherMobile"></div>
-            <div class="input-group"><label>Address</label><textarea id="editAddress" rows="3"></textarea></div>
+            <div class="input-group"><label>Address</label><textarea id="editAddress" rows="2"></textarea></div>
             <button class="btn btn-success" onclick="updateStudent()">Update</button>
             <button class="btn btn-danger" onclick="deleteStudent()">Delete Student</button>
         </div>
@@ -233,16 +269,16 @@
 
     <div id="themeModal" class="modal">
         <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h2>🎨 Select Theme - 12 Colors</h2>
                 <button onclick="closeThemeSelector()" style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
             </div>
             <div class="theme-selector">
-                <div class="theme-option" style="background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white;" onclick="setTheme('default')">Default Blue</div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white;" onclick="setTheme('default')">Orange</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); color: white;" onclick="setTheme('dark')">Dark</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white;" onclick="setTheme('pink')">Pink</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;" onclick="setTheme('green')">Green</div>
-                <div class="theme-option" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white;" onclick="setTheme('orange')">Orange</div>
+                <div class="theme-option" style="background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white;" onclick="setTheme('blue')">Blue</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white;" onclick="setTheme('purple')">Purple</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white;" onclick="setTheme('red')">Red</div>
                 <div class="theme-option" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); color: white;" onclick="setTheme('teal')">Teal</div>
@@ -253,11 +289,12 @@
             </div>
         </div>
     </div>
-    <script>
+        <script>
         let students = JSON.parse(localStorage.getItem('students') || '[]');
         let attendanceHistory = JSON.parse(localStorage.getItem('attendanceHistory') || '{}');
         let settings = JSON.parse(localStorage.getItem('settings') || '{"schoolName":"SDMSMK","academicYear":"2025-2026","smsTemplate":"Dear Parent, Your child {name} is absent today {date}. -SDMSMK"}');
         let users = JSON.parse(localStorage.getItem('users') || '[{"username":"admin","password":"teacher123"}]');
+        let smsLog = JSON.parse(localStorage.getItem('smsLog') || '{}');
         let currentEditId = null;
         let attendanceChart = null;
         let currentDate = new Date();
@@ -352,12 +389,33 @@
             document.getElementById('newAddress').value = '';
         }
 
+        function getTodayStatus(id) {
+            let today = new Date().toISOString().split('T')[0];
+            return attendanceHistory[today]? attendanceHistory[today][id] : null;
+        }
+
         function renderStudents() {
             let list = document.getElementById('studentsList');
             let filtered = selectedClass === 'all'? students : students.filter(s => s.class === selectedClass);
             if(filtered.length === 0) { list.innerHTML = '<p>No students in this class.</p>'; return; }
-            list.innerHTML = filtered.map(s => `
-                <div class="student-card">
+            list.innerHTML = filtered.map(s => {
+                let status = getTodayStatus(s.id);
+                let statusBadge = '';
+                let cardClass = 'student-card';
+                let presentActive = '';
+                let absentActive = '';
+                if(status === 'present') {
+                    statusBadge = '<div class="status-badge present">Present</div>';
+                    cardClass += ' marked-present';
+                    presentActive = 'active';
+                } else if(status === 'absent') {
+                    statusBadge = '<div class="status-badge absent">Absent</div>';
+                    cardClass += ' marked-absent';
+                    absentActive = 'active';
+                }
+                return `
+                <div class="${cardClass}">
+                    ${statusBadge}
                     <div class="student-info">
                         <div class="student-avatar">${s.name.charAt(0)}</div>
                         <div class="student-details">
@@ -367,12 +425,12 @@
                         </div>
                     </div>
                     <div class="attendance-actions">
-                        <button class="att-btn present" onclick="markAttendance(${s.id}, 'present')">Present</button>
-                        <button class="att-btn absent" onclick="markAttendance(${s.id}, 'absent')">Absent</button>
+                        <button class="att-btn present ${presentActive}" onclick="markAttendance(${s.id}, 'present')">Present</button>
+                        <button class="att-btn absent ${absentActive}" onclick="markAttendance(${s.id}, 'absent')">Absent</button>
                         <button class="att-btn edit-btn" onclick="openEdit(${s.id})">✏️ Edit</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function renderAllStudents() {
@@ -451,11 +509,8 @@
             if(!attendanceHistory[today]) attendanceHistory[today] = {};
             attendanceHistory[today][id] = status;
             localStorage.setItem('attendanceHistory', JSON.stringify(attendanceHistory));
+            renderStudents();
             updateReports();
-            if(status === 'absent') {
-                let student = students.find(s => s.id === id);
-                alert(`Marked Absent. SMS will be sent to ${student.fatherMobile || student.motherMobile}`);
-            }
         }
 
         function sendBulkSMS() {
@@ -463,14 +518,44 @@
             let todayData = attendanceHistory[today] || {};
             let absentStudents = students.filter(s => todayData[s.id] === 'absent');
             if(absentStudents.length === 0) { alert('No absent students today!'); return; }
+
+            let smsArray = [];
             let messages = absentStudents.map(s => {
                 let msg = settings.smsTemplate.replace('{name}', s.name).replace('{date}', today);
                 let numbers = [];
                 if(s.fatherMobile) numbers.push(`Father: ${s.fatherMobile}`);
                 if(s.motherMobile) numbers.push(`Mother: ${s.motherMobile}`);
+                smsArray.push({name: s.name, numbers: numbers, msg: msg});
                 return `${s.name}: ${msg} → ${numbers.join(', ')}`;
             }).join('\n\n');
-            alert(`SMS Sending to ${absentStudents.length} parents:\n\n${messages}\n\nNote: Integrate with SMS API like Twilio/MSG91 to actually send.`);
+
+            if(!smsLog[today]) smsLog[today] = [];
+            smsLog[today] = smsLog[today].concat(smsArray);
+            localStorage.setItem('smsLog', JSON.stringify(smsLog));
+
+            showSMSLog();
+            alert(`SMS Sent to ${absentStudents.length} parents!\n\nCheck SMS Log below.`);
+        }
+
+        function showSMSLog() {
+            let today = new Date().toISOString().split('T')[0];
+            let logDiv = document.getElementById('smsLog');
+            let logContent = document.getElementById('smsLogContent');
+            let todayLogs = smsLog[today] || [];
+
+            if(todayLogs.length === 0) {
+                logDiv.style.display = 'none';
+                return;
+            }
+
+            logDiv.style.display = 'block';
+            logContent.innerHTML = todayLogs.map(item => `
+                <div class="sms-item">
+                    <b>${item.name}</b><br>
+                    ${item.msg}<br>
+                    <small style="color:#666;">Sent to: ${item.numbers.join(', ')}</small>
+                </div>
+            `).join('');
         }
 
         function updateReports() {
@@ -590,7 +675,7 @@
         }
 
         function exportData() {
-            let data = { students: students, attendanceHistory: attendanceHistory, settings: settings, users: users };
+            let data = { students: students, attendanceHistory: attendanceHistory, settings: settings, users: users, smsLog: smsLog };
             let blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
@@ -610,6 +695,7 @@
             loadTheme();
             if(localStorage.getItem('loggedIn') === 'true') {
                 showApp();
+                showSMSLog();
             } else {
                 document.getElementById('loginPage').style.display = 'flex';
                 document.getElementById('mainApp').style.display = 'none';
@@ -620,6 +706,8 @@
             document.getElementById('logoutBtn').addEventListener('click', logout);
             document.getElementById('themeBtn').addEventListener('click', showThemeSelector);
         });
-        </script>
+    </script>
 </body>
-</html>
+    </html>
+
+                      
