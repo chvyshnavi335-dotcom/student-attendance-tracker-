@@ -180,6 +180,18 @@
             <div id="attendance-tab" class="tab-content active">
                 <div class="card">
                     <h2>Mark Attendance</h2>
+                   <!-- IKKADA PASTE CHEY 👇 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                <input type="text" id="searchStudent" placeholder="🔍 Search by Name/Roll..."
+                       onkeyup="filterStudents()"
+                       style="padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+
+                <input type="date" id="attendanceDate"
+                       onchange="loadAttendanceByDate()"
+                       style="padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+            </div>
+            <div id="dateLabel" style="text-align: center; margin-bottom: 10px; font-weight: bold; color: var(--accent-color);">Today: 2026-06-14</div>
+            <!-- PASTE END -->
                     <div class="class-filter" id="classFilter"></div>
                     <button class="btn btn-warning" onclick="sendBulkSMS()">📱 Send Absent SMS to All Parents</button>
                     <div id="smsLog" class="sms-log" style="display:none;">
@@ -723,6 +735,34 @@
                 document.getElementById('mainApp').style.display = 'none';
             }
         });
+                 // NEW: Set today's date on load
+        function setTodayDate() {
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+            document.getElementById('dateLabel').innerText = `Date: ${today}`;
+        }
+
+        // NEW: Load attendance for selected date
+        function loadAttendanceByDate() {
+            let selectedDate = document.getElementById('attendanceDate').value;
+            document.getElementById('dateLabel').innerText = `Date: ${selectedDate}`;
+            displayStudents(); 
+        }
+
+        // NEW: Search students
+        function filterStudents() {
+            let searchValue = document.getElementById('searchStudent').value.toLowerCase();
+            let studentCards = document.querySelectorAll('.student-card');
+            studentCards.forEach(card => {
+                let studentName = card.querySelector('h3').innerText.toLowerCase();
+                let studentRoll = card.querySelector('.student-info').innerText.toLowerCase();
+                if(studentName.includes(searchValue) || studentRoll.includes(searchValue)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+         }
     </script>
 </body>
 </html>
