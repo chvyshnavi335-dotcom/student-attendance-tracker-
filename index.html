@@ -3,394 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDMSMK - Attendance v3.0</title>
+    <title>SDMSMK - Attendance</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-
-        :root {
-            --primary: #f12711;
-            --secondary: #f5af19;
-            --gradient: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
-        }
-
-        body[data-theme="purple"] {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        body[data-theme="green"] {
-            --primary: #11998e;
-            --secondary: #38ef7d;
-            --gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        }
-
-        body[data-theme="orange"] {
-            --primary: #f12711;
-            --secondary: #f5af19;
-            --gradient: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
-        }
-
-        body[data-theme="pink"] {
-            --primary: #ec008c;
-            --secondary: #fc6767;
-            --gradient: linear-gradient(135deg, #ec008c 0%, #fc6767 100%);
-        }
-
-        body { background: var(--gradient); min-height: 100vh; transition: all 0.3s; }
-
-.login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-.login-box { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
-.login-box h2 { text-align: center; color: var(--primary); margin-bottom: 10px; font-size: 28px; }
-.login-box p { text-align: center; color: #888; margin-bottom: 30px; }
-.login-box input { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; }
-.login-box input:focus { outline: none; border-color: var(--primary); }
-.login-btn { width: 100%; background: var(--gradient); color: white; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-.login-btn:hover { opacity: 0.9; }
-.login-note { text-align: center; margin-top: 15px; font-size: 13px; color: #888; }
-
-.app-container { display: none; }
-.header { background: var(--gradient); color: white; padding: 20px; text-align: center; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.header h1 { font-size: 26px; font-weight: 600; }
-.header span { font-size: 14px; opacity: 0.9; }
-.header-btns { position: absolute; right: 15px; top: 15px; display: flex; gap: 8px; }
-.theme-btn,.logout { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 13px; }
-.theme-btn:hover,.logout:hover { background: rgba(255,255,255,0.3); }
-.tabs { display: flex; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.tab { flex: 1; padding: 14px; text-align: center; cursor: pointer; border: none; background: white; font-weight: 500; color: #666; }
-.tab.active { background: #f8f9ff; border-bottom: 3px solid var(--primary); color: var(--primary); font-weight: bold; }
-.container { padding: 20px 15px; max-width: 650px; margin: 0 auto; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.date { text-align: center; color: white; margin: 15px 0; font-size: 16px; font-weight: 500; }
-.add-form { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.add-form h3 { color: var(--primary); margin-bottom: 15px; font-size: 18px; }
-.add-form input { width: 100%; padding: 13px; margin: 8px 0; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px; }
-.add-form input:focus { outline: none; border-color: var(--primary); }
-.add-btn { width: 100%; background: var(--gradient); color: white; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-.add-btn:hover { opacity: 0.9; }
-.search { width: 100%; padding: 13px; margin: 15px 0; border: 2px solid white; border-radius: 10px; background: white; font-size: 14px; }
-.stats { display: flex; justify-content: space-around; background: white; padding: 15px; border-radius: 15px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.stats div { text-align: center; }
-.stats.label { font-size: 12px; color: #888; margin-bottom: 5px; }
-.stats.value { font-size: 24px; font-weight: bold; color: var(--primary); }
-.student-card { background: white; padding: 15px; margin: 12px 0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 5px solid var(--primary); transition: transform 0.2s; }
-.student-card:hover { transform: translateY(-2px); }
-.student-info { flex: 1; }
-.roll-badge { background: var(--gradient); color: white; padding: 4px 10px; border-radius: 15px; font-size: 12px; display: inline-block; margin-bottom: 8px; font-weight: 600; }
-.student-name { font-size: 17px; font-weight: 600; margin: 5px 0; color: #333; }
-.student-status { font-size: 13px; color: #666; margin: 3px 0; }
-.parent-num { font-size: 12px; color: #888; }
-.actions { display: flex; gap: 8px; }
-.btn { width: 45px; height: 45px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; transition: transform 0.2s; }
-.btn:hover { transform: scale(1.1); }
-.btn-p { background: #10b981; color: white; }
-.btn-a { background: #ef4444; color: white; }
-.btn-x { background: #6b7280; color: white; }
-
-.card { background: white; padding: 20px; border-radius: 15px; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.card h3 { color: var(--primary); margin-bottom: 15px; }
-.report-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
-.report-item:last-child { border-bottom: none; }
-.download-btn { width: 100%; background: var(--gradient); color: white; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-
-.theme-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-.theme-box { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; }
-.theme-box h3 { color: #333; margin-bottom: 20px; text-align: center; }
-.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.theme-option { padding: 20px; border-radius: 15px; cursor: pointer; text-align: center; color: white; font-weight: bold; border: 3px solid transparent; }
-.theme-option:hover { border-color: #333; }
-.theme-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.theme-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-.theme-orange { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); }
-.theme-pink { background: linear-gradient(135deg, #ec008c 0%, #fc6767 100%); }
-.close-theme { width: 100%; margin-top: 15px; padding: 12px; background: #6b7280; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .header { background: rgba(0,0,0,0.1); color: white; padding: 20px; text-align: center; }
+        .header h1 { font-size: 24px; }
+        .header p { font-size: 14px; opacity: 0.9; margin-top: 5px; }
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .date { text-align: center; color: white; margin: 15px 0; font-size: 16px; }
+        .add-form { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .add-form h3 { margin-bottom: 15px; color: #333; }
+        .add-form input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .add-btn { width: 100%; background: #4CAF50; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .add-btn:hover { background: #45a049; }
+        .search { width: 100%; padding: 12px; margin: 15px 0; border: none; border-radius: 5px; background: white; }
+        .stats { display: flex; justify-content: space-around; background: white; padding: 15px; border-radius: 10px; margin: 15px 0; }
+        .stats div { text-align: center; }
+        .stats .num { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stats .label { font-size: 12px; color: #666; }
+        .student-card { background: white; padding: 15px; margin: 10px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .student-info { flex: 1; }
+        .student-name { font-size: 18px; font-weight: bold; margin: 5px 0; }
+        .student-status { font-size: 14px; color: #666; }
+        .roll { background: #667eea; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px; display: inline-block; }
+        .parent { font-size: 12px; color: #999; margin-top: 3px; }
+        .actions { display: flex; gap: 10px; }
+        .btn { width: 50px; height: 50px; border: none; border-radius: 8px; cursor: pointer; font-size: 20px; font-weight: bold; }
+        .btn-p { background: #4CAF50; color: white; }
+        .btn-a { background: #f44336; color: white; }
+        .btn-x { background: #999; color: white; }
+        .btn:hover { opacity: 0.8; }
     </style>
 </head>
-<body data-theme="orange">
-    <div class="login-container" id="loginPage">
-        <div class="login-box">
-            <h2>SDMSMK</h2>
-            <p>Student Attendance System</p>
-            <input type="text" id="username" placeholder="Teacher Name">
-            <input type="password" id="password" placeholder="Password">
-            <button class="login-btn" id="signInBtn">Sign In</button>
-            <div class="login-note">Evaru ayina login avvochu - Em pettina ok</div>
-        </div>
+<body>
+    <div class="header">
+        <h1>SDMSMK - Class 302</h1>
+        <p>Student Attendance System</p>
     </div>
 
-    <div class="app-container" id="mainApp">
-        <div class="header">
-            <h1>SDMSMK</h1>
-            <span>Class 302 - Attendance</span>
-            <div class="header-btns">
-                <button class="theme-btn" id="themeBtn">🎨 Theme</button>
-                <button class="logout" id="logoutBtn">Logout</button>
+    <div class="container">
+        <div class="date">📅 Date: <span id="today"></span></div>
+
+        <div class="add-form">
+            <h3>➕ Add New Student</h3>
+            <input type="text" id="rollNo" placeholder="Roll No (Ex: 1)">
+            <input type="text" id="studentName" placeholder="Student Name (Ex: Rahul)">
+            <input type="tel" id="parentNumber" placeholder="Parent Number (Ex: 9490475335)">
+            <button class="add-btn" onclick="addStudent()">Add Student</button>
+        </div>
+
+        <input type="text" class="search" id="searchBox" placeholder="🔍 Search Student..." onkeyup="searchStudent()">
+
+        <div class="stats">
+            <div>
+                <div class="num" id="presentCount">0</div>
+                <div class="label">Present</div>
+            </div>
+            <div>
+                <div class="num" id="absentCount">0</div>
+                <div class="label">Absent</div>
+            </div>
+            <div>
+                <div class="num" id="totalCount">0</div>
+                <div class="label">Total</div>
             </div>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" data-tab="attendance">Attendance</button>
-            <button class="tab" data-tab="reports">Reports</button>
-            <button class="tab" data-tab="settings">Settings</button>
-        </div>
-
-        <div class="container">
-            <div class="tab-content active" id="attendance-tab">
-                <div class="date">📅 Date: <span id="today"></span></div>
-
-                <div class="add-form">
-                    <h3>➕ Add New Student</h3>
-                    <input type="text" id="rollNo" placeholder="Roll No">
-                    <input type="text" id="studentName" placeholder="Student Full Name">
-                    <input type="tel" id="parentNumber" placeholder="Parent Mobile: 9490475335">
-                    <button class="add-btn" id="addStudentBtn">+ Add Student</button>
-                </div>
-
-                <input type="text" class="search" id="searchBox" placeholder="🔍 Search Student...">
-
-                <div class="stats">
-                    <div>
-                        <div class="label">Present</div>
-                        <div class="value" id="presentCount">0</div>
-                    </div>
-                    <div>
-                        <div class="label">Absent</div>
-                        <div class="value" id="absentCount">0</div>
-                    </div>
-                    <div>
-                        <div class="label">Total</div>
-                        <div class="value" id="totalCount">0</div>
-                    </div>
-                </div>
-
-                <div id="studentList"></div>
-            </div>
-
-            <div class="tab-content" id="reports-tab">
-                <div class="card">
-                    <h3>📊 Today's Summary</h3>
-                    <div class="report-item">
-                        <span>Date</span>
-                        <strong id="reportDate"></strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Total Students</span>
-                        <strong id="reportTotal">0</strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Present</span>
-                        <strong style="color: #10b981;" id="reportPresent">0</strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Absent</span>
-                        <strong style="color: #ef4444;" id="reportAbsent">0</strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Attendance %</span>
-                        <strong id="reportPercent">0%</strong>
-                    </div>
-                    <button class="download-btn" id="downloadBtn">📥 Download Report</button>
-                </div>
-
-                <div class="card">
-                    <h3>❌ Absent Students List</h3>
-                    <div id="absentList">No absent students</div>
-                </div>
-            </div>
-
-            <div class="tab-content" id="settings-tab">
-                <div class="card">
-                    <h3>⚙️ App Settings</h3>
-                    <div class="report-item">
-                        <span>School Name</span>
-                        <strong>SDMSMK</strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Class</span>
-                        <strong>302</strong>
-                    </div>
-                    <div class="report-item">
-                        <span>Logged In As</span>
-                        <strong id="currentUser">Teacher</strong>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>🗑️ Data Management</h3>
-                    <button class="download-btn" id="clearDataBtn" style="background: #ef4444;">Clear All Students Data</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="theme-modal" id="themeModal">
-        <div class="theme-box">
-            <h3>Choose Theme Color</h3>
-            <div class="theme-grid">
-                <div class="theme-option theme-purple" data-theme="purple">Purple</div>
-                <div class="theme-option theme-green" data-theme="green">Green</div>
-                <div class="theme-option theme-orange" data-theme="orange">Orange</div>
-                <div class="theme-option theme-pink" data-theme="pink">Pink</div>
-            </div>
-            <button class="close-theme" id="closeThemeBtn">Close</button>
-        </div>
+        <div id="studentList"></div>
     </div>
 
     <script>
-        // Load saved theme
-        let savedTheme = localStorage.getItem('theme') || 'orange';
-        document.body.setAttribute('data-theme', savedTheme);
-
-        // Check login on load
-        document.addEventListener('DOMContentLoaded', function() {
-            if(localStorage.getItem('loggedIn') === 'true') {
-                showApp();
-            } else {
-                document.getElementById('loginPage').style.display = 'flex';
-                document.getElementById('mainApp').style.display = 'none';
-            }
-
-            // Event Listeners - FIXED
-            document.getElementById('signInBtn').addEventListener('click', login);
-            document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('themeBtn').addEventListener('click', showThemeSelector);
-            document.getElementById('closeThemeBtn').addEventListener('click', hideThemeSelector);
-            document.getElementById('addStudentBtn').addEventListener('click', addStudent);
-            document.getElementById('downloadBtn').addEventListener('click', downloadReport);
-            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-            document.getElementById('searchBox').addEventListener('keyup', searchStudent);
-
-            // Tab switching
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.dataset.tab, this);
-                });
-            });
-
-            // Theme options
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.addEventListener('click', function() {
-                    setTheme(this.dataset.theme);
-                });
-            });
-        });
-
-        function login() {
-            let user = document.getElementById('username').value.trim();
-            let pass = document.getElementById('password').value.trim();
-
-            // EVARU AYINA LOGIN AVVOCHU
-            if(user || pass) {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('currentUser', user || 'Teacher');
-                showApp();
-            } else {
-                alert('Name leka Password enter chey - em pettina ok');
-            }
-        }
-
-        function logout() {
-            if(confirm('Logout avvala?')) {
-                localStorage.setItem('loggedIn', 'false');
-                document.getElementById('loginPage').style.display = 'flex';
-                document.getElementById('mainApp').style.display = 'none';
-                document.getElementById('username').value = '';
-                document.getElementById('password').value = '';
-            }
-        }
-
-        function showApp() {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('currentUser').textContent = localStorage.getItem('currentUser') || 'Teacher';
-            renderStudents();
-            updateReports();
-        }
-
-        function switchTab(tabName, btn) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-            btn.classList.add('active');
-            document.getElementById(tabName + '-tab').classList.add('active');
-
-            if(tabName === 'reports') updateReports();
-        }
-
-        function showThemeSelector() {
-            document.getElementById('themeModal').style.display = 'flex';
-        }
-
-        function hideThemeSelector() {
-            document.getElementById('themeModal').style.display = 'none';
-        }
-
-        function setTheme(theme) {
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            hideThemeSelector();
-        }
-
         let students = JSON.parse(localStorage.getItem('students')) || [];
-
+        
         document.getElementById('today').textContent = new Date().toLocaleDateString('en-IN');
-
+        
         function addStudent() {
             let roll = document.getElementById('rollNo').value.trim();
             let name = document.getElementById('studentName').value.trim();
             let parentNum = document.getElementById('parentNumber').value.trim();
-
+            
             if(!roll ||!name ||!parentNum) {
                 alert("Roll, Name, Parent Number anni fill chey");
                 return;
             }
-
+            
             if(parentNum.length!== 10) {
                 alert("Parent number 10 digits undali\nEx: 9490475335\n+91 vaddu, 0 vaddu");
                 return;
             }
-
+            
             if(students.find(s => s.roll === roll)) {
                 alert("Ee Roll number already undi");
                 return;
             }
-
+            
             students.push({
-                roll: roll,
-                name: name,
+                roll: roll, 
+                name: name, 
                 parent: parentNum,
                 status: 'Present'
             });
-
+            
             saveData();
             renderStudents();
-
+            
             document.getElementById('rollNo').value = '';
             document.getElementById('studentName').value = '';
             document.getElementById('parentNumber').value = '';
         }
-
+        
         function markPresent(roll) {
             let student = students.find(s => s.roll === roll);
             student.status = 'Present';
             saveData();
             renderStudents();
         }
-
+        
         function markAbsent(roll) {
             let student = students.find(s => s.roll === roll);
             student.status = 'Absent';
             saveData();
             renderStudents();
-
+            
             let date = new Date().toLocaleDateString('en-IN');
             let message = `SDMSMK School: Mee pillalu ${student.name} (${student.roll}) ee roju ${date} na school ki raaledu. Gamaninchagalaru.`;
-
+            
             let smsURL = `sms:${student.parent}?body=${encodeURIComponent(message)}`;
             window.location.href = smsURL;
         }
-
+        
         function deleteStudent(roll) {
             if(confirm('Ee student ni delete cheyala?')) {
                 students = students.filter(s => s.roll!== roll);
@@ -398,23 +140,52 @@
                 renderStudents();
             }
         }
-
+        
         function renderStudents() {
             let list = document.getElementById('studentList');
             let search = document.getElementById('searchBox').value.toLowerCase();
-
-            let filtered = students.filter(s =>
-                s.name.toLowerCase().includes(search) ||
+            
+            let filtered = students.filter(s => 
+                s.name.toLowerCase().includes(search) || 
                 s.roll.toLowerCase().includes(search)
             );
-
+            
             list.innerHTML = filtered.map(s => `
                 <div class="student-card">
                     <div class="student-info">
-                        <div class="roll-badge">Roll ${s.roll}</div>
+                        <span class="roll">Roll ${s.roll}</span>
                         <div class="student-name">${s.name}</div>
                         <div class="student-status">${s.status}</div>
-                        <div class="parent-num">📱 ${s.parent}</div>
+                        <div class="parent">📱 ${s.parent}</div>
                     </div>
                     <div class="actions">
-                        <button class="btn btn-p" 
+                        <button class="btn btn-p" onclick="markPresent('${s.roll}')">P</button>
+                        <button class="btn btn-a" onclick="markAbsent('${s.roll}')">A</button>
+                        <button class="btn btn-x" onclick="deleteStudent('${s.roll}')">×</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            let present = students.filter(s => s.status === 'Present').length;
+            let absent = students.filter(s => s.status === 'Absent').length;
+            document.getElementById('presentCount').textContent = present;
+            document.getElementById('absentCount').textContent = absent;
+            document.getElementById('totalCount').textContent = students.length;
+        }
+        
+        function searchStudent() {
+            renderStudents();
+        }
+        
+        function saveData() {
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+        
+        renderStudents();
+    </script>
+</body>
+    </html>
