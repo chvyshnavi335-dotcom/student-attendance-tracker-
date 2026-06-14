@@ -509,7 +509,7 @@
             renderStudents();
 
             let date = new Date().toLocaleDateString('en-IN');
-            let message = `${settings.schoolName}: Mee pillalu ${student.name} (${student.roll}) ee roju ${date} na school ki raaledu. Gamaninchagalaru.`;
+            let message = `${settings.collegeName}: Mee pillalu ${student.name} (${student.roll}) ee roju ${date} na school ki raaledu. Gamaninchagalaru.`;
 
             // FATHER SMS
             let smsFather = `sms:${student.fatherNumber}?body=${encodeURIComponent(message)}`;
